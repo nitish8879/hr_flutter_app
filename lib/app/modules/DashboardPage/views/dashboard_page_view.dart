@@ -54,26 +54,22 @@ class DashboardPageView extends GetView<DashboardPageController> {
                       ),
                     );
                   } else {
-                    return Scaffold(
-                      body: Obx(
-                        () {
-                          return IndexedStack(
-                            index: controller.currentIndex.value,
-                            children: controller.pages,
-                          );
-                        },
-                      ),
-                      floatingActionButton: FloatingActionButton(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-                        onPressed: () {},
-                        child: Icon(
-                          Icons.people_alt_outlined,
-                          color: AppColors.kBlack900.withOpacity(.8),
+                    return Obx(() {
+                      return Scaffold(
+                        body: IndexedStack(
+                          index: controller.currentIndex.value,
+                          children: controller.pages,
                         ),
-                      ),
-                      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-                      bottomNavigationBar: Obx(() {
-                        return AnimatedBottomNavigationBar(
+                        floatingActionButton: FloatingActionButton(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+                          onPressed: controller.onFloatTap,
+                          child: Icon(
+                            Icons.people_alt_outlined,
+                            color: controller.currentIndex.value == 4 ? AppColors.kFoundationPurple400 : AppColors.kBlack900.withOpacity(.8),
+                          ),
+                        ),
+                        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+                        bottomNavigationBar: AnimatedBottomNavigationBar(
                           icons: const [
                             Icons.home_filled,
                             Icons.calendar_month_rounded,
@@ -91,9 +87,9 @@ class DashboardPageView extends GetView<DashboardPageController> {
                           notchSmoothness: NotchSmoothness.defaultEdge,
                           backgroundColor: AppColors.kpurpleBackground,
                           onTap: controller.onBottomNavTap,
-                        );
-                      }),
-                    );
+                        ),
+                      );
+                    });
                   }
                 }),
           );

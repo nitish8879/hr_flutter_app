@@ -8,7 +8,7 @@
             "name": "hr_application debug wala",
             "request": "launch",
             "type": "dart",
-
+            "flutterMode": "debug"
         },
         {
             "name": "hr_application (profile mode)",

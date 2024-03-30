@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/AllEmployesPage/bindings/all_employes_page_binding.dart';
+import '../modules/AllEmployesPage/views/all_employes_page_view.dart';
 import '../modules/DashboardPage/bindings/dashboard_page_binding.dart';
 import '../modules/DashboardPage/views/dashboard_page_view.dart';
 import '../modules/HolidayPage/bindings/holiday_page_binding.dart';
@@ -64,6 +66,11 @@ class AppPages {
       name: _Paths.PROFILE_PAGE,
       page: () => const ProfilePageView(),
       binding: ProfilePageBinding(),
+    ),
+    GetPage(
+      name: _Paths.ALL_EMPLOYES_PAGE,
+      page: () => const AllEmployesPageView(),
+      binding: AllEmployesPageBinding(),
     ),
   ];
 }

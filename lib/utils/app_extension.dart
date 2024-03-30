@@ -11,6 +11,14 @@ extension AppDateTime on DateTime {
     return DateFormat("MMM d, y").format(this);
   }
 
+  String get toMMDDYYYY {
+    return DateFormat("MMM d, yyyy").format(this);
+  }
+
+  String get toDDMMYYYY {
+    return DateFormat("dd-MM-yyyy").format(this);
+  }
+
   String get toWEEKDAY {
     return DateFormat.EEEE().format(this);
   }

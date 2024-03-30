@@ -6,10 +6,10 @@ class UserDataModel {
   String? fullName;
   String? createdAt;
   String? roleType;
-  int? totalSickLeavePending;
-  int? totalPaidLeavePending;
-  int? totalSickLeaveTaken;
-  int? totalPaidLeaveTaken;
+  int? totalLeaveBalance;
+  int? totalLeaveApproved;
+  int? totalLeavePending;
+  int? totalLeaveCancelled;
   String? companyName;
   List<String>? wrokingDays;
   String? inTime;
@@ -25,10 +25,10 @@ class UserDataModel {
       this.fullName,
       this.createdAt,
       this.roleType,
-      this.totalSickLeavePending,
-      this.totalPaidLeavePending,
-      this.totalSickLeaveTaken,
-      this.totalPaidLeaveTaken,
+      this.totalLeaveBalance,
+      this.totalLeaveApproved,
+      this.totalLeavePending,
+      this.totalLeaveCancelled,
       this.companyName,
       this.wrokingDays,
       this.inTime,
@@ -44,10 +44,10 @@ class UserDataModel {
     fullName = json['fullName'];
     createdAt = json['createdAt'];
     roleType = json['roleType'];
-    totalSickLeavePending = json['totalSickLeavePending'];
-    totalPaidLeavePending = json['totalPaidLeavePending'];
-    totalSickLeaveTaken = json['totalSickLeaveTaken'];
-    totalPaidLeaveTaken = json['totalPaidLeaveTaken'];
+    totalLeaveBalance = json['totalLeaveBalance'];
+    totalLeaveApproved = json['totalLeaveApproved'];
+    totalLeavePending = json['totalLeavePending'];
+    totalLeaveCancelled = json['totalLeaveCancelled'];
     companyName = json['companyName'];
     wrokingDays = json['wrokingDays'].cast<String>();
     inTime = json['inTime'];
@@ -65,10 +65,10 @@ class UserDataModel {
     data['fullName'] = this.fullName;
     data['createdAt'] = this.createdAt;
     data['roleType'] = this.roleType;
-    data['totalSickLeavePending'] = this.totalSickLeavePending;
-    data['totalPaidLeavePending'] = this.totalPaidLeavePending;
-    data['totalSickLeaveTaken'] = this.totalSickLeaveTaken;
-    data['totalPaidLeaveTaken'] = this.totalPaidLeaveTaken;
+    data['totalLeaveBalance'] = this.totalLeaveBalance;
+    data['totalLeaveApproved'] = this.totalLeaveApproved;
+    data['totalLeavePending'] = this.totalLeavePending;
+    data['totalLeaveCancelled'] = this.totalLeaveCancelled;
     data['companyName'] = this.companyName;
     data['wrokingDays'] = this.wrokingDays;
     data['inTime'] = this.inTime;

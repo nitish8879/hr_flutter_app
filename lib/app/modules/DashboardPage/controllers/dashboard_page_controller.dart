@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hr_application/app/modules/AllEmployesPage/bindings/all_employes_page_binding.dart';
+import 'package:hr_application/app/modules/AllEmployesPage/views/all_employes_page_view.dart';
 import 'package:hr_application/app/modules/HolidayPage/bindings/holiday_page_binding.dart';
 import 'package:hr_application/app/modules/HolidayPage/views/holiday_page_view.dart';
 import 'package:hr_application/app/modules/HomePage/bindings/home_page_binding.dart';
@@ -20,9 +22,10 @@ class DashboardPageController extends GetxController {
 
   Map<int, bool> canPageLoad = {
     0: false,
-    1: false, //true
+    1: false,
     2: false,
     3: false,
+    4: false, // all team leave
   };
   @override
   void onInit() {
@@ -34,12 +37,13 @@ class DashboardPageController extends GetxController {
       const SizedBox(),
       const SizedBox(),
       const SizedBox(),
+      const SizedBox(),
     ];
   }
 
   onBottomNavTap(int newIndex) {
+    print(newIndex);
     if (newIndex == currentIndex.value) return;
-    // newIndex =1
     if (!(canPageLoad[newIndex]!)) {
       canPageLoad[newIndex] = true;
       if (newIndex == 1) {
@@ -59,6 +63,15 @@ class DashboardPageController extends GetxController {
       }
     }
     currentIndex.value = newIndex;
+  }
+
+  void onFloatTap() {
+    if (!(canPageLoad[4]!)) {
+      pages.removeAt(4);
+      AllEmployesPageBinding().dependencies();
+      pages.insert(4, const AllEmployesPageView());
+    }
+    currentIndex.value = 4;
   }
 
   @override
