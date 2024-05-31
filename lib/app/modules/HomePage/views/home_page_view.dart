@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_swipe_button/flutter_swipe_button.dart';
+// import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:get/get.dart';
 import 'package:hr_application/app/modules/HomePage/views/user_activity_view.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
@@ -205,34 +205,34 @@ class HomePageView extends GetView<HomePageController> {
               })),
           28.height,
           //? Swipe Button
-          Obx(() {
-            return controller.attendenceModel.value?.outTime == null &&
-                    (controller.selectedDate.value.year == controller.now.year &&
-                        controller.selectedDate.value.month == controller.now.month &&
-                        controller.selectedDate.value.day == controller.now.day)
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: SwipeButton.expand(
-                      thumb: const Icon(
-                        Icons.double_arrow_rounded,
-                        color: Colors.white,
-                      ),
-                      thumbPadding: const EdgeInsets.all(6),
-                      height: 58,
-                      borderRadius: borderRadius,
-                      activeThumbColor: AppColors.kFoundationPurple700,
-                      activeTrackColor: AppColors.kFoundationPurple100,
-                      onSwipe: controller.performInOut,
-                      child: Obx(() {
-                        return Text(
-                          controller.userPerformActivty.value.label,
-                          style: Get.textTheme.titleSmall,
-                        );
-                      }),
-                    ),
-                  )
-                : const SizedBox();
-          }),
+          // Obx(() {
+          //   return controller.attendenceModel.value?.outTime == null &&
+          //           (controller.selectedDate.value.year == controller.now.year &&
+          //               controller.selectedDate.value.month == controller.now.month &&
+          //               controller.selectedDate.value.day == controller.now.day)
+          //       ? Padding(
+          //           padding: const EdgeInsets.symmetric(horizontal: 16),
+          //           child: SwipeButton.expand(
+          //             thumb: const Icon(
+          //               Icons.double_arrow_rounded,
+          //               color: Colors.white,
+          //             ),
+          //             thumbPadding: const EdgeInsets.all(6),
+          //             height: 58,
+          //             borderRadius: borderRadius,
+          //             activeThumbColor: AppColors.kFoundationPurple700,
+          //             activeTrackColor: AppColors.kFoundationPurple100,
+          //             onSwipe: controller.performInOut,
+          //             child: Obx(() {
+          //               return Text(
+          //                 controller.userPerformActivty.value.label,
+          //                 style: Get.textTheme.titleSmall,
+          //               );
+          //             }),
+          //           ),
+          //         )
+          //       : const SizedBox();
+          // }),
           60.height,
         ],
       ),
