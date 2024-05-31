@@ -25,12 +25,10 @@ class HomePageController extends GetxController {
     super.onReady();
     getTodatyAttendenceData();
     getActivityData();
-    print(AppStorageController.to.currentUser?.toJson());
   }
 
   void onDateChnged(DateTime newDate) {
     selectedDate.value = newDate;
-    print(selectedDate.toString());
     getTodatyAttendenceData();
     getActivityData();
   }
@@ -50,7 +48,9 @@ class HomePageController extends GetxController {
       attendenceLoading.value = false;
     }).then((resp) {
       attendenceLoading.value = false;
-      if (resp != null && resp is Map<String, dynamic> && (resp['status'] as bool)) {
+      if (resp != null &&
+          resp is Map<String, dynamic> &&
+          (resp['status'] as bool)) {
         attendenceModel.value = AttendenceModel.fromJson(resp['data']);
       } else {
         attendenceModel.value = null;
@@ -73,7 +73,9 @@ class HomePageController extends GetxController {
       activityLoading.value = false;
     }).then((resp) {
       activityLoading.value = false;
-      if (resp != null && resp is Map<String, dynamic> && resp['data'] != null) {
+      if (resp != null &&
+          resp is Map<String, dynamic> &&
+          resp['data'] != null) {
         userActivityModel.value = UserActivityModel.fromJson(resp['data']);
         if (userActivityModel.value?.checkIn == null) {
           userPerformActivty.value = UserPerformActivty.IN;
@@ -87,7 +89,6 @@ class HomePageController extends GetxController {
       } else {
         userActivityModel.value = null;
       }
-      print("getActivityData$resp");
     });
   }
 
@@ -103,9 +104,11 @@ class HomePageController extends GetxController {
     if (userPerformActivty.value == UserPerformActivty.IN) {
       payload.putIfAbsent("inTime", () => DateTime.now().toHOUR24MINUTESECOND);
     } else if (userPerformActivty.value == UserPerformActivty.BREAKIN) {
-      payload.putIfAbsent("breakInTime", () => DateTime.now().toHOUR24MINUTESECOND);
+      payload.putIfAbsent(
+          "breakInTime", () => DateTime.now().toHOUR24MINUTESECOND);
     } else if (userPerformActivty.value == UserPerformActivty.BREAKOUT) {
-      payload.putIfAbsent("breakOutTime", () => DateTime.now().toHOUR24MINUTESECOND);
+      payload.putIfAbsent(
+          "breakOutTime", () => DateTime.now().toHOUR24MINUTESECOND);
     } else if (userPerformActivty.value == UserPerformActivty.OUT) {
       payload.putIfAbsent("outTime", () => DateTime.now().toHOUR24MINUTESECOND);
     }
@@ -130,22 +133,24 @@ class HomePageController extends GetxController {
     });
   }
 
-  String? calculateTimeDifference(String? timeString1, String? timeString2) {
-    if (timeString1 == null || timeString2 == null) {
+  String? calculateTimeDifference(
+      List<String>? breakInTimes, List<String>? breakOutTimes) {
+    if ((breakInTimes?.isEmpty ?? true) || (breakOutTimes?.isEmpty ?? true)) {
       return null;
     }
-
-    // Parse time strings
-    DateFormat timeFormat = DateFormat("HH:mm:ss");
-    DateTime time1 = timeFormat.parse(timeString1);
-    DateTime time2 = timeFormat.parse(timeString2);
-
-    // Calculate time difference
-    Duration difference = time1.difference(time2);
+    Duration totalDifference = Duration();
+    for (var i = 0; i < (breakOutTimes?.length ?? 0); i++) {
+      // Parse time strings
+      DateFormat timeFormat = DateFormat("HH:mm:ss");
+      DateTime time1 = timeFormat.parse(breakInTimes![i]);
+      DateTime time2 = timeFormat.parse(breakOutTimes![i]);
+      // Calculate time difference
+      totalDifference = totalDifference + time1.difference(time2);
+    }
 
     // Get hours and minutes from the duration
-    int hours = difference.inHours;
-    int minutes = difference.inMinutes.remainder(60);
+    int hours = totalDifference.inHours;
+    int minutes = totalDifference.inMinutes.remainder(60);
 
     // Format the difference
     return "${hours.abs().toString().padLeft(2, '0')}:${minutes.abs().toString().padLeft(2, '0')} min";
@@ -165,7 +170,8 @@ class HomePageController extends GetxController {
 
     for (int day = 1; day <= totalDaysInMonth; day++) {
       var currentDate = DateTime(currentYear, currentMonth, day).toWEEKDAY;
-      if (AppStorageController.to.currentUser!.wrokingDays!.contains(currentDate.toUpperCase())) {
+      if (AppStorageController.to.currentUser!.wrokingDays!
+          .contains(currentDate.toUpperCase())) {
         count++;
       }
     }

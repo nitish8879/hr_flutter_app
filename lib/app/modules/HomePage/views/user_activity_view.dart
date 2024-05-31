@@ -19,7 +19,8 @@ class UserActivityView extends StatelessWidget {
           ActivityCard(
             iconData: Icons.input_rounded,
             title: "Check In",
-            dateTime: DateFormat("yyyy-MM-dd hh:mm:ss").parse("${userActivityModel!.checkIn!.date!} ${userActivityModel!.checkIn!.inTime!}"),
+            dateTime: DateFormat("yyyy-MM-dd hh:mm:ss").parse(
+                "${userActivityModel!.createdAt!} ${userActivityModel!.checkIn!.inTime!}"),
             description: userActivityModel!.checkIn?.msg ?? '-',
           )
         },
@@ -28,8 +29,8 @@ class UserActivityView extends StatelessWidget {
           ActivityCard(
             iconData: Icons.free_breakfast_outlined,
             title: "Break In ",
-            dateTime:
-                DateFormat("yyyy-MM-dd hh:mm:ss").parse("${userActivityModel!.breakInTime!.date!} ${userActivityModel!.breakInTime!.breakInTime!}"),
+            dateTime: DateFormat("yyyy-MM-dd hh:mm:ss").parse(
+                "${userActivityModel!.createdAt!} ${userActivityModel!.createdAt!}"),
             description: "",
           ),
         },
@@ -38,8 +39,8 @@ class UserActivityView extends StatelessWidget {
           ActivityCard(
             iconData: Icons.free_breakfast_outlined,
             title: "Break Out ",
-            dateTime: DateFormat("yyyy-MM-dd hh:mm:ss")
-                .parse("${userActivityModel!.breakOutTime!.date!} ${userActivityModel!.breakOutTime!.breakOutTime!}"),
+            dateTime: DateFormat("yyyy-MM-dd hh:mm:ss").parse(
+                "${userActivityModel!.createdAt} ${userActivityModel!.createdAt}"),
             description: "",
           )
         },
@@ -48,7 +49,8 @@ class UserActivityView extends StatelessWidget {
           ActivityCard(
             iconData: Icons.input,
             title: "Check Out",
-            dateTime: DateFormat("yyyy-MM-dd hh:mm:ss").parse("${userActivityModel!.outTime!.date!} ${userActivityModel!.outTime!.outTime!}"),
+            dateTime: DateFormat("yyyy-MM-dd hh:mm:ss").parse(
+                "${userActivityModel!.createdAt} ${userActivityModel!.outTime!.outTime!}"),
             description: userActivityModel!.outTime?.msg ?? '-',
           )
         },

@@ -1,118 +1,91 @@
 class UserActivityModel {
-  BreakOutTime? breakOutTime;
+  List<BreakOutTime>? breakOutTime;
+  List<BreakInTime>? breakInTime;
   int? activityID;
   CheckIn? checkIn;
-  BreakInTime? breakInTime;
   OutTime? outTime;
+  String? createdAt;
 
-  UserActivityModel({this.breakOutTime, this.activityID, this.checkIn, this.breakInTime, this.outTime});
+  UserActivityModel({
+    this.breakOutTime,
+    this.activityID,
+    this.checkIn,
+    this.breakInTime,
+    this.outTime,
+    this.createdAt,
+  });
 
   UserActivityModel.fromJson(Map<String, dynamic> json) {
-    breakOutTime = json['breakOutTime'] != null ? new BreakOutTime.fromJson(json['breakOutTime']) : null;
     activityID = json['activityID'];
-    checkIn = json['checkIn'] != null ? new CheckIn.fromJson(json['checkIn']) : null;
-    breakInTime = json['breakInTime'] != null ? new BreakInTime.fromJson(json['breakInTime']) : null;
-    outTime = json['outTime'] != null ? new OutTime.fromJson(json['outTime']) : null;
-  }
+    createdAt = json['date'];
+    checkIn =
+        json['checkIn'] != null ? CheckIn.fromJson(json['checkIn']) : null;
+    outTime =
+        json['outTime'] != null ? OutTime.fromJson(json['outTime']) : null;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.breakOutTime != null) {
-      data['breakOutTime'] = this.breakOutTime!.toJson();
+    if (json['breakOutTime'] != null) {
+      breakOutTime = [];
+      for (var v in (json['breakOutTime'] as List<dynamic>)) {
+        breakOutTime?.add(BreakOutTime.fromJson(v));
+      }
     }
-    data['activityID'] = this.activityID;
-    if (this.checkIn != null) {
-      data['checkIn'] = this.checkIn!.toJson();
+    if (json['breakInTime'] != null) {
+      breakInTime = [];
+      for (var v in (json['breakInTime'] as List<dynamic>)) {
+        breakInTime?.add(BreakInTime.fromJson(v));
+      }
     }
-    if (this.breakInTime != null) {
-      data['breakInTime'] = this.breakInTime!.toJson();
-    }
-    if (this.outTime != null) {
-      data['outTime'] = this.outTime!.toJson();
-    }
-    return data;
   }
 }
 
 class BreakOutTime {
   String? breakOutTime;
-  String? date;
 
-  BreakOutTime({this.breakOutTime, this.date});
+  BreakOutTime({this.breakOutTime});
 
   BreakOutTime.fromJson(Map<String, dynamic> json) {
     breakOutTime = json['breakOutTime'];
-    date = json['date'];
   }
+}
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['breakOutTime'] = this.breakOutTime;
-    data['date'] = this.date;
-    return data;
+class BreakInTime {
+  String? breakInTime;
+
+  BreakInTime({this.breakInTime});
+
+  BreakInTime.fromJson(Map<String, dynamic> json) {
+    breakInTime = json['breakInTime'];
   }
 }
 
 class CheckIn {
   String? inTime;
-  String? date;
   String? msg;
 
-  CheckIn({this.inTime, this.date, this.msg});
+  CheckIn({this.inTime, this.msg});
 
   CheckIn.fromJson(Map<String, dynamic> json) {
     inTime = json['inTime'];
-    date = json['date'];
     msg = json['msg'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['inTime'] = this.inTime;
-    data['date'] = this.date;
     data['msg'] = this.msg;
-    return data;
-  }
-}
-
-class BreakInTime {
-  String? date;
-  String? breakInTime;
-
-  BreakInTime({this.date, this.breakInTime});
-
-  BreakInTime.fromJson(Map<String, dynamic> json) {
-    date = json['date'];
-    breakInTime = json['breakInTime'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['date'] = this.date;
-    data['breakInTime'] = this.breakInTime;
     return data;
   }
 }
 
 class OutTime {
-  String? date;
   String? msg;
   String? outTime;
 
-  OutTime({this.date, this.msg, this.outTime});
+  OutTime({this.msg, this.outTime});
 
   OutTime.fromJson(Map<String, dynamic> json) {
-    date = json['date'];
     msg = json['msg'];
     outTime = json['outTime'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['date'] = this.date;
-    data['msg'] = this.msg;
-    data['outTime'] = this.outTime;
-    return data;
   }
 }
 
