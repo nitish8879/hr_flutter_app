@@ -2,7 +2,8 @@ import 'package:get/get.dart';
 
 class APIUrlsService extends GetxService {
   static APIUrlsService to = Get.isRegistered<APIUrlsService>() ? Get.find<APIUrlsService>() : Get.put(APIUrlsService());
-  final String baseURL = "http://10.0.2.2:1010/";
+  // final String baseURL = "http://10.0.2.2:1010/"; //for App localhost
+  final String baseURL = "http://127.0.0.1:1010/"; // for web app localhost
 
   final String login = "auth/signin";
   final String signup = "auth/signup";

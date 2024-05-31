@@ -41,9 +41,11 @@ class LoginPageController extends GetxController {
           "password": passTC.text,
         },
       ).then((resp) async {
+        print(resp.toString());
         isLoading.value = false;
         if (resp is Map<String, dynamic> && resp['status']) {
-          await AppStorageController.to.login(resp['data'] as Map<String, dynamic>);
+          await AppStorageController.to
+              .login(resp['data'] as Map<String, dynamic>);
           showSuccessSnack("User Logged.");
         } else {
           showErrorSnack((resp['errorMsg'] ?? (resp)).toString());

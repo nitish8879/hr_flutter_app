@@ -2,7 +2,8 @@ import 'package:get/get.dart';
 import 'package:hr_application/data/controllers/api_url_service.dart';
 
 class ApiController extends GetConnect {
-  static ApiController to = Get.isRegistered<ApiController>() ? Get.find() : Get.put(ApiController());
+  static ApiController to =
+      Get.isRegistered<ApiController>() ? Get.find() : Get.put(ApiController());
 
   @override
   void onInit() {
