@@ -233,6 +233,30 @@ class HomePageView extends GetView<HomePageController> {
                   )
                 : const SizedBox();
           }),
+          28.height,
+          Obx(() {
+            return controller.attendenceModel.value?.inTime != null && controller.attendenceModel.value?.outTime == null
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: SwipeButton.expand(
+                      thumb: const Icon(
+                        Icons.double_arrow_rounded,
+                        color: Colors.white,
+                      ),
+                      thumbPadding: const EdgeInsets.all(6),
+                      height: 58,
+                      borderRadius: borderRadius,
+                      activeThumbColor: AppColors.kFoundationPurple700,
+                      activeTrackColor: AppColors.kFoundationPurple100,
+                      onSwipe: controller.performOut,
+                      child: Text(
+                        "Swipe to Out",
+                        style: Get.textTheme.titleSmall,
+                      ),
+                    ),
+                  )
+                : const SizedBox();
+          }),
           60.height,
         ],
       ),

@@ -2,7 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:hr_application/app/routes/app_pages.dart';
 import 'package:hr_application/utils/app_extension.dart';
+import 'package:hr_application/utils/helper_function.dart';
 import 'package:hr_application/utils/theme/app_colors.dart';
 import 'package:hr_application/utils/theme/app_theme.dart';
 import 'package:hr_application/widgets/app_button.dart';
@@ -11,7 +13,7 @@ import 'package:hr_application/widgets/app_textfield.dart';
 import '../controllers/sign_up_page_controller.dart';
 
 class SignUpPageView extends GetView<SignUpPageController> {
-  const SignUpPageView({Key? key}) : super(key: key);
+  const SignUpPageView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,110 +65,110 @@ class SignUpPageView extends GetView<SignUpPageController> {
               ),
               16.height,
               AppTextField(
-                hintText: "Username ",
+                hintText: "Email ",
                 controller: controller.usernameTC,
+                validator: (val) {
+                  if (val?.isEmpty ?? true) {
+                    return "This field can't be empty";
+                  } else {
+                    return null;
+                  }
+                },
               ),
               16.height,
               AppTextField(
                 hintText: "Password",
                 isPassword: true,
                 controller: controller.passTC,
+                validator: (val) {
+                  if (val?.isEmpty ?? true) {
+                    return "This field can't be empty";
+                  } else {
+                    return null;
+                  }
+                },
               ),
               16.height,
-              Obx(() {
-                return SwitchListTile(
-                  dense: true,
-                  value: controller.isEmployeeSignup.value,
-                  onChanged: (value) => controller.isEmployeeSignup.value = value,
-                  title: Text(
-                    controller.isEmployeeSignup.value ? "Employe Signup" : "Admin Signup",
-                    style: Get.textTheme.bodyLarge,
+              // Obx(() {
+              //   return SwitchListTile(
+              //     dense: true,
+              //     value: controller.isEmployeeSignup.value,
+              //     onChanged: (value) => controller.isEmployeeSignup.value = value,
+              //     title: Text(
+              //       controller.isEmployeeSignup.value ? "Employe Signup" : "Admin Signup",
+              //       style: Get.textTheme.bodyLarge,
+              //     ),
+              //     controlAffinity: ListTileControlAffinity.leading,
+              //   );
+              // }),
+              Column(
+                children: [
+                  title("Organization Details", Icons.people_alt_outlined),
+                  16.height,
+                  AppTextField(
+                    hintText: "Organization Name",
+                    controller: controller.organizationTC,
+                    validator: (val) {
+                      if (val?.isEmpty ?? true) {
+                        return "This field can't be empty";
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
-                  controlAffinity: ListTileControlAffinity.leading,
-                );
-              }),
-              Obx(() {
-                return Visibility(
-                  visible: !controller.isEmployeeSignup.value,
-                  replacement: Column(
-                    children: [
-                      title("Employee Details", Icons.person),
-                      AppTextField(
-                        margin: const EdgeInsets.symmetric(vertical: 16),
-                        hintText: "Company ID",
-                        controller: controller.companyIDTC,
-                        validator: (val) {
-                          if (val?.isEmpty ?? true) {
-                            return "This field can't be empty";
-                          } else {
-                            return null;
-                          }
-                        },
+                  16.height,
+                  Obx(() {
+                    return AppButton.appOulineButtonRow(
+                      onPressed: () => openTimePickerdialog(true, context),
+                      label: controller.startTime.value == null ? "Select start time" : formatTimeOfDay(controller.startTime.value!),
+                      suffixIcon: const Icon(
+                        Icons.access_time_outlined,
+                        color: AppColors.kBlue600,
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      title("Organization Details", Icons.people_alt_outlined),
-                      16.height,
-                      AppTextField(
-                        hintText: "Organization Name",
-                        controller: controller.organizationTC,
+                    );
+                  }),
+                  16.height,
+                  Obx(() {
+                    return AppButton.appOulineButtonRow(
+                      onPressed: () => openTimePickerdialog(false, context),
+                      label: controller.endTime.value == null ? "Select end time" : formatTimeOfDay(controller.endTime.value!),
+                      suffixIcon: const Icon(
+                        Icons.access_time_outlined,
+                        color: AppColors.kBlue600,
                       ),
-                      16.height,
-                      Obx(() {
-                        return AppButton.appOulineButtonRow(
-                          onPressed: () => openTimePickerdialog(true, context),
-                          label: controller.startTime.isEmpty ? "Select start time" : controller.startTime.value,
-                          suffixIcon: const Icon(
-                            Icons.access_time_outlined,
-                            color: AppColors.kBlue600,
-                          ),
-                        );
-                      }),
-                      16.height,
-                      Obx(() {
-                        return AppButton.appOulineButtonRow(
-                          onPressed: () => openTimePickerdialog(false, context),
-                          label: controller.endTime.isEmpty ? "Select end time" : controller.endTime.value,
-                          suffixIcon: const Icon(
-                            Icons.access_time_outlined,
-                            color: AppColors.kBlue600,
-                          ),
-                        );
-                      }),
-                      16.height,
-                      DecoratedBox(
-                        decoration: kBoxDecoration,
-                        child: SizedBox(
-                          width: double.maxFinite,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Obx(() {
-                              return Wrap(
-                                spacing: 10,
-                                children: List.generate(
-                                  controller.workingDays.value.length,
-                                  (index) => ChoiceChip(
-                                    label: Text(
-                                      controller.workingDays[index].label,
-                                      style: Get.textTheme.bodySmall?.copyWith(
-                                        color: controller.workingDays[index].isSelected ? AppColors.kWhite : AppColors.black,
-                                      ),
-                                    ),
-                                    selected: controller.workingDays[index].isSelected,
-                                    onSelected: (value) => controller.onWorkingDaysChange(index),
+                    );
+                  }),
+                  16.height,
+                  DecoratedBox(
+                    decoration: kBoxDecoration,
+                    child: SizedBox(
+                      width: double.maxFinite,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Obx(() {
+                          return Wrap(
+                            spacing: 10,
+                            runSpacing: 15,
+                            children: List.generate(
+                              controller.workingDays.value.length,
+                              (index) => ChoiceChip(
+                                label: Text(
+                                  controller.workingDays[index].label,
+                                  style: Get.textTheme.bodySmall?.copyWith(
+                                    color: controller.workingDays[index].isSelected ? AppColors.kWhite : AppColors.black,
                                   ),
-                                ).toList(),
-                              );
-                            }),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              }),
+                                ),
+                                selected: controller.workingDays[index].isSelected,
+                                onSelected: (value) => controller.onWorkingDaysChange(index),
+                              ),
+                            ).toList(),
+                          );
+                        }),
+                      ),
+                    ),
+                  )
+                ],
+              ),
               45.height,
               Obx(() {
                 return AppButton.appButton(
@@ -201,7 +203,7 @@ class SignUpPageView extends GetView<SignUpPageController> {
                         style: Get.textTheme.bodySmall?.copyWith(
                           color: AppColors.kBlue900,
                         ),
-                        recognizer: TapGestureRecognizer()..onTap = Get.back,
+                        recognizer: TapGestureRecognizer()..onTap = controller.gotToLoginPage,
                       ),
                     ],
                   ),
@@ -223,9 +225,9 @@ class SignUpPageView extends GetView<SignUpPageController> {
 
     if (selectedTime != null) {
       if (isStartTime) {
-        controller.startTime.value = "${selectedTime.hour}:${selectedTime.minute}:00";
+        controller.startTime.value = selectedTime;
       } else {
-        controller.endTime.value = "${selectedTime.hour}:${selectedTime.minute}:00";
+        controller.endTime.value = selectedTime;
       }
     }
   }

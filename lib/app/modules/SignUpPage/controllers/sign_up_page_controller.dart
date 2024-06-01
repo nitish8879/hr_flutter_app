@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hr_application/app/modules/SignUpPage/model/working_days_model.dart';
+import 'package:hr_application/app/routes/app_pages.dart';
+import 'package:hr_application/data/app_enums.dart';
 import 'package:hr_application/data/controllers/api_conntroller.dart';
 import 'package:hr_application/data/controllers/api_url_service.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
@@ -11,21 +13,20 @@ import 'package:hr_application/utils/helper_function.dart';
 class SignUpPageController extends GetxController {
   String get appImageLogo => AppImages.appLogo;
   var usernameTC = TextEditingController(
-        text: kDebugMode ? "nitish12" : null,
+        text: kDebugMode ? "nitish_gupta@tijoree.money" : null,
       ),
       passTC = TextEditingController(
-        text: kDebugMode ? "nitish12" : null,
+        text: kDebugMode ? "nitish_gupta@tijoree.money" : null,
       ),
       fullNameTC = TextEditingController(
-        text: kDebugMode ? "nitish12" : null,
+        text: kDebugMode ? "Nitish Gupta" : null,
       ),
       organizationTC = TextEditingController(
-        text: kDebugMode ? "nitish12" : null,
-      ),
-      companyIDTC = TextEditingController();
+        text: kDebugMode ? "Tijoree" : null,
+      );
   var workingDays = <WorkingDaysModel>[].obs;
-  var startTime = "05:45:46".obs, endTime = "07:45:46".obs;
-  var isEmployeeSignup = true.obs;
+  var startTime = Rxn<TimeOfDay?>(null), endTime = Rxn<TimeOfDay?>(null);
+  // var isEmployeeSignup = true.obs;
 
   var formKey = GlobalKey<FormState>();
   var isSaveLoading = false.obs;
@@ -45,7 +46,7 @@ class SignUpPageController extends GetxController {
           (e) => WorkingDaysModel(
             label: e,
             code: e.toUpperCase(),
-            isSelected: false,
+            isSelected: kDebugMode,
           ),
         )
         .toList();
@@ -62,33 +63,30 @@ class SignUpPageController extends GetxController {
     workingDays.refresh();
   }
 
+  void gotToLoginPage() {
+    Get.offAllNamed(Routes.LOGIN_PAGE);
+  }
+
   Future<void> signUP() async {
     if (formKey.currentState?.validate() ?? false || !isSaveLoading.value) {
+      if (startTime.value == null || endTime.value == null || workingDays.value.where((element) => element.isSelected).isEmpty) {
+        showErrorSnack("Select Start and End Time and working days");
+        return;
+      }
       isSaveLoading.value = true;
       var payload = {};
       List<WorkingDaysModel> tempWorkingdays = List.from(workingDays.value);
       tempWorkingdays.removeWhere((element) => !element.isSelected);
-      if (isEmployeeSignup.value) {
-        payload = {
-          "username": usernameTC.text.trim(),
-          "password": passTC.text,
-          "fullName": fullNameTC.text,
-          "roleType": "EMPLOYEE",
-          "companyID": num.tryParse(companyIDTC.text),
-        };
-      } else {
-        payload = {
-          "username": usernameTC.text.trim(),
-          "password": passTC.text,
-          "fullName": fullNameTC.text,
-          "roleType": "SUPERADMIN",
-          "companyName": organizationTC.text,
-          "inTime": startTime.value,
-          "outTime": endTime.value,
-          "wrokingDays": tempWorkingdays.map((e) => e.code).toList(),
-        };
-      }
-      await Future.delayed(Duration(seconds: 2));
+      payload = {
+        "username": usernameTC.text.trim(),
+        "password": passTC.text,
+        "fullName": fullNameTC.text,
+        "roleType": UserRoleType.superAdmin.code,
+        "companyName": organizationTC.text,
+        "inTime": formatTimeOfDay(startTime.value!),
+        "outTime": formatTimeOfDay(endTime.value!),
+        "wrokingDays": tempWorkingdays.map((e) => e.code).toList(),
+      };
       ApiController.to
           .callPOSTAPI(
         url: APIUrlsService.to.signup,
@@ -113,11 +111,11 @@ class SignUpPageController extends GetxController {
 
   @override
   void onClose() {
-    usernameTC.dispose();
-    passTC.dispose();
-    fullNameTC.dispose();
-    companyIDTC.dispose();
-    organizationTC.dispose();
+    // usernameTC.dispose();
+    // passTC.dispose();
+    // fullNameTC.dispose();
+    // companyIDTC.dispose();
+    // organizationTC.dispose();
     super.onClose();
   }
 }

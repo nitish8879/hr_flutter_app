@@ -80,9 +80,8 @@ class HomePageController extends GetxController {
         } else if (userActivityModel.value?.breakOutTime == null ||
             ((userActivityModel.value?.breakInTime?.length ?? 0) > ((userActivityModel.value?.breakOutTime?.length ?? 0)))) {
           userPerformActivty.value = UserPerformActivty.BREAKOUT;
-        } else {
+        } else if (userActivityModel.value?.outTime == null) {
           userPerformActivty.value = UserPerformActivty.BREAKIN;
-          // userPerformActivty.value = UserPerformActivty.OUT;
         }
       } else {
         userActivityModel.value = null;
@@ -108,7 +107,6 @@ class HomePageController extends GetxController {
     } else if (userPerformActivty.value == UserPerformActivty.OUT) {
       payload.putIfAbsent("outTime", () => DateTime.now().toHOUR24MINUTESECOND);
     }
-    print(payload);
     ApiController.to
         .callPOSTAPI(
       url: APIUrlsService.to.dailyInOut,
@@ -117,7 +115,6 @@ class HomePageController extends GetxController {
         .catchError((e) {
       activityLoading.value = false;
       // showErrorSnack(e.toString());
-      print("performInOut$e");
     }).then((resp) {
       activityLoading.value = false;
       if (resp != null && resp is Map<String, dynamic> && resp['status']) {
@@ -125,7 +122,6 @@ class HomePageController extends GetxController {
         getActivityData();
         showSuccessSnack("User has been: ${userPerformActivty.value.name}");
       }
-      print("performInOut$resp");
     });
   }
 
@@ -183,5 +179,10 @@ class HomePageController extends GetxController {
     }
 
     return count;
+  }
+
+  void performOut() {
+    userPerformActivty.value = UserPerformActivty.OUT;
+    performInOut();
   }
 }

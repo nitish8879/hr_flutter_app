@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 showSuccessSnack(String msg) {
@@ -24,6 +25,16 @@ String secondsToTime(int seconds) {
   String twoDigits(int n) => n.toString().padLeft(2, "0");
 
   String formattedTime = "${twoDigits(hours)}:${twoDigits(minutes)}:${twoDigits(remainingSeconds)}";
+
+  return formattedTime;
+}
+
+String formatTimeOfDay(TimeOfDay timeOfDay) {
+  String twoDigits(int n) => n.toString().padLeft(2, '0');
+  int seconds = 0;
+  String formattedTime = "${twoDigits(timeOfDay.hour)}:"
+      "${twoDigits(timeOfDay.minute)}:"
+      "${twoDigits(seconds)}";
 
   return formattedTime;
 }

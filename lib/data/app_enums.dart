@@ -15,6 +15,16 @@ enum UserRoleType {
     };
   }
 
+  String get code {
+    return switch (this) {
+      (UserRoleType.superAdmin) => "SUPERADMIN",
+      (UserRoleType.admin) => "ADMIN",
+      (UserRoleType.manager) => "MANAGER",
+      (UserRoleType.watcher) => "WATCHER",
+      (UserRoleType.employee) => "EMPLOYEE",
+    };
+  }
+
   static UserRoleType fromString(String val) {
     return switch (val.toLowerCase()) {
       "superadmin" => UserRoleType.superAdmin,

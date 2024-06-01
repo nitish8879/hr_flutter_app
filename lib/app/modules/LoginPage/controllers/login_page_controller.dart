@@ -28,7 +28,7 @@ class LoginPageController extends GetxController {
   }
 
   void gotoSignUpPage() {
-    Get.toNamed(Routes.SIGN_UP_PAGE);
+    Get.offAllNamed(Routes.SIGN_UP_PAGE);
   }
 
   void login() {

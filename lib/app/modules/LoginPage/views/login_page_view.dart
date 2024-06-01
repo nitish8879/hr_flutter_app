@@ -96,7 +96,7 @@ class LoginPageView extends GetView<LoginPageController> {
                       style: Get.textTheme.bodySmall,
                     ),
                     TextSpan(
-                      text: " Signup",
+                      text: " Create Organization",
                       style: Get.textTheme.bodySmall?.copyWith(
                         color: AppColors.kBlue900,
                       ),
