@@ -48,9 +48,7 @@ class HomePageController extends GetxController {
       attendenceLoading.value = false;
     }).then((resp) {
       attendenceLoading.value = false;
-      if (resp != null &&
-          resp is Map<String, dynamic> &&
-          (resp['status'] as bool)) {
+      if (resp != null && resp is Map<String, dynamic> && (resp['status'] as bool)) {
         attendenceModel.value = AttendenceModel.fromJson(resp['data']);
       } else {
         attendenceModel.value = null;
@@ -73,18 +71,18 @@ class HomePageController extends GetxController {
       activityLoading.value = false;
     }).then((resp) {
       activityLoading.value = false;
-      if (resp != null &&
-          resp is Map<String, dynamic> &&
-          resp['data'] != null) {
+      if (resp != null && resp is Map<String, dynamic> && resp['data'] != null) {
         userActivityModel.value = UserActivityModel.fromJson(resp['data']);
         if (userActivityModel.value?.checkIn == null) {
           userPerformActivty.value = UserPerformActivty.IN;
-        } else if (userActivityModel.value?.breakInTime == null) {
+        } else if (userActivityModel.value?.breakInTime == null || (userActivityModel.value?.breakInTime?.isEmpty ?? true)) {
           userPerformActivty.value = UserPerformActivty.BREAKIN;
-        } else if (userActivityModel.value?.breakOutTime == null) {
+        } else if (userActivityModel.value?.breakOutTime == null ||
+            ((userActivityModel.value?.breakInTime?.length ?? 0) > ((userActivityModel.value?.breakOutTime?.length ?? 0)))) {
           userPerformActivty.value = UserPerformActivty.BREAKOUT;
         } else {
-          userPerformActivty.value = UserPerformActivty.OUT;
+          userPerformActivty.value = UserPerformActivty.BREAKIN;
+          // userPerformActivty.value = UserPerformActivty.OUT;
         }
       } else {
         userActivityModel.value = null;
@@ -104,11 +102,9 @@ class HomePageController extends GetxController {
     if (userPerformActivty.value == UserPerformActivty.IN) {
       payload.putIfAbsent("inTime", () => DateTime.now().toHOUR24MINUTESECOND);
     } else if (userPerformActivty.value == UserPerformActivty.BREAKIN) {
-      payload.putIfAbsent(
-          "breakInTime", () => DateTime.now().toHOUR24MINUTESECOND);
+      payload.putIfAbsent("breakInTime", () => DateTime.now().toHOUR24MINUTESECOND);
     } else if (userPerformActivty.value == UserPerformActivty.BREAKOUT) {
-      payload.putIfAbsent(
-          "breakOutTime", () => DateTime.now().toHOUR24MINUTESECOND);
+      payload.putIfAbsent("breakOutTime", () => DateTime.now().toHOUR24MINUTESECOND);
     } else if (userPerformActivty.value == UserPerformActivty.OUT) {
       payload.putIfAbsent("outTime", () => DateTime.now().toHOUR24MINUTESECOND);
     }
@@ -133,27 +129,38 @@ class HomePageController extends GetxController {
     });
   }
 
-  String? calculateTimeDifference(
-      List<String>? breakInTimes, List<String>? breakOutTimes) {
-    if ((breakInTimes?.isEmpty ?? true) || (breakOutTimes?.isEmpty ?? true)) {
+  Duration calculateTotalBreakTime(List<String> inTimes, List<String> outTimes) {
+    Duration totalBreakTime = Duration.zero;
+    DateFormat format = DateFormat("HH:mm:ss");
+
+    for (int i = 0; i < inTimes.length && i < outTimes.length; i++) {
+      DateTime inTime = format.parse(inTimes[i]);
+      DateTime outTime = format.parse(outTimes[i]);
+      totalBreakTime += outTime.difference(inTime);
+    }
+
+    return totalBreakTime;
+  }
+
+  String? calculateTimeDifference(List<String>? inTimes, List<String>? outTimes) {
+    if ((inTimes?.isEmpty ?? true) || (outTimes?.isEmpty ?? true)) {
       return null;
     }
-    Duration totalDifference = Duration();
-    for (var i = 0; i < (breakOutTimes?.length ?? 0); i++) {
-      // Parse time strings
-      DateFormat timeFormat = DateFormat("HH:mm:ss");
-      DateTime time1 = timeFormat.parse(breakInTimes![i]);
-      DateTime time2 = timeFormat.parse(breakOutTimes![i]);
-      // Calculate time difference
-      totalDifference = totalDifference + time1.difference(time2);
+
+    var times = mergeBreakInBreakOutTimes(inTimes!, outTimes!);
+
+    if (times.length < 2) {
+      // If there are less than two elements, return zero duration
+      return null;
     }
-
-    // Get hours and minutes from the duration
-    int hours = totalDifference.inHours;
-    int minutes = totalDifference.inMinutes.remainder(60);
-
-    // Format the difference
-    return "${hours.abs().toString().padLeft(2, '0')}:${minutes.abs().toString().padLeft(2, '0')} min";
+    DateFormat format = DateFormat("HH:mm:ss");
+    Duration totalDuration = Duration.zero;
+    for (int i = 0; i < times.length - 1; i++) {
+      DateTime currentTime = format.parse(times[i]);
+      DateTime nextTime = format.parse(times[i + 1]);
+      totalDuration += nextTime.difference(currentTime);
+    }
+    return secondsToTime(totalDuration.inSeconds);
   }
 
   @override
@@ -170,8 +177,7 @@ class HomePageController extends GetxController {
 
     for (int day = 1; day <= totalDaysInMonth; day++) {
       var currentDate = DateTime(currentYear, currentMonth, day).toWEEKDAY;
-      if (AppStorageController.to.currentUser!.wrokingDays!
-          .contains(currentDate.toUpperCase())) {
+      if (AppStorageController.to.currentUser!.wrokingDays!.contains(currentDate.toUpperCase())) {
         count++;
       }
     }

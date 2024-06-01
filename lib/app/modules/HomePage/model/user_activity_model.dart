@@ -1,6 +1,6 @@
 class UserActivityModel {
-  List<BreakOutTime>? breakOutTime;
-  List<BreakInTime>? breakInTime;
+  List<String>? breakOutTime;
+  List<String>? breakInTime;
   int? activityID;
   CheckIn? checkIn;
   OutTime? outTime;
@@ -18,43 +18,11 @@ class UserActivityModel {
   UserActivityModel.fromJson(Map<String, dynamic> json) {
     activityID = json['activityID'];
     createdAt = json['date'];
-    checkIn =
-        json['checkIn'] != null ? CheckIn.fromJson(json['checkIn']) : null;
-    outTime =
-        json['outTime'] != null ? OutTime.fromJson(json['outTime']) : null;
+    checkIn = json['checkIn'] != null ? CheckIn.fromJson(json['checkIn']) : null;
+    outTime = json['outTime'] != null ? OutTime.fromJson(json['outTime']) : null;
 
-    if (json['breakOutTime'] != null) {
-      breakOutTime = [];
-      for (var v in (json['breakOutTime'] as List<dynamic>)) {
-        breakOutTime?.add(BreakOutTime.fromJson(v));
-      }
-    }
-    if (json['breakInTime'] != null) {
-      breakInTime = [];
-      for (var v in (json['breakInTime'] as List<dynamic>)) {
-        breakInTime?.add(BreakInTime.fromJson(v));
-      }
-    }
-  }
-}
-
-class BreakOutTime {
-  String? breakOutTime;
-
-  BreakOutTime({this.breakOutTime});
-
-  BreakOutTime.fromJson(Map<String, dynamic> json) {
-    breakOutTime = json['breakOutTime'];
-  }
-}
-
-class BreakInTime {
-  String? breakInTime;
-
-  BreakInTime({this.breakInTime});
-
-  BreakInTime.fromJson(Map<String, dynamic> json) {
-    breakInTime = json['breakInTime'];
+    breakInTime = (json['breakInTime'] as List<dynamic>?)?.cast<String>();
+    breakOutTime = (json['breakOutTime'] as List<dynamic>?)?.cast<String>();
   }
 }
 

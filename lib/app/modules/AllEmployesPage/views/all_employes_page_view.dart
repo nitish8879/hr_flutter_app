@@ -9,6 +9,7 @@ class AllEmployesPageView extends GetView<AllEmployesPageController> {
   const AllEmployesPageView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    print(AppStorageController.to.currentUser?.roleType ?? "null hai bhai");
     return Scaffold(
       appBar: AppBar(
         title: const Text('AllEmployesPageView'),

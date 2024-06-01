@@ -81,7 +81,7 @@ class SignUpPageController extends GetxController {
           "username": usernameTC.text.trim(),
           "password": passTC.text,
           "fullName": fullNameTC.text,
-          "roleType": "ADMIN",
+          "roleType": "SUPERADMIN",
           "companyName": organizationTC.text,
           "inTime": startTime.value,
           "outTime": endTime.value,

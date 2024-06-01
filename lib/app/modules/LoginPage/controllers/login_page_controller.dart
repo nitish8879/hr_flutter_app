@@ -14,7 +14,7 @@ class LoginPageController extends GetxController {
         text: kDebugMode ? "nitish" : null,
       ),
       passTC = TextEditingController(
-        text: kDebugMode ? "nitish1234" : null,
+        text: kDebugMode ? "nitish12" : null,
       );
   var isLoading = false.obs;
   @override
@@ -44,8 +44,7 @@ class LoginPageController extends GetxController {
         print(resp.toString());
         isLoading.value = false;
         if (resp is Map<String, dynamic> && resp['status']) {
-          await AppStorageController.to
-              .login(resp['data'] as Map<String, dynamic>);
+          await AppStorageController.to.login(resp['data'] as Map<String, dynamic>);
           showSuccessSnack("User Logged.");
         } else {
           showErrorSnack((resp['errorMsg'] ?? (resp)).toString());

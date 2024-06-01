@@ -99,9 +99,7 @@ class HomePageView extends GetView<HomePageController> {
                       "Check In",
                       controller.attendenceModel.value?.inTime == null
                           ? "-"
-                          : DateFormat("hh:mm:ss")
-                              .parse(controller.attendenceModel.value!.inTime!)
-                              .tohhMMh,
+                          : DateFormat("hh:mm:ss").parse(controller.attendenceModel.value!.inTime!).tohhMMh,
                       controller.userActivityModel.value?.checkIn?.msg ?? '',
                     );
                   }),
@@ -115,10 +113,7 @@ class HomePageView extends GetView<HomePageController> {
                         "Check Out",
                         controller.attendenceModel.value?.outTime == null
                             ? "-"
-                            : DateFormat("hh:mm:ss")
-                                .parse(
-                                    controller.attendenceModel.value!.outTime!)
-                                .tohhMMh,
+                            : DateFormat("hh:mm:ss").parse(controller.attendenceModel.value!.outTime!).tohhMMh,
                         controller.userActivityModel.value?.outTime?.msg ?? '',
                       );
                     },
@@ -142,9 +137,7 @@ class HomePageView extends GetView<HomePageController> {
                         Icons.free_breakfast_outlined,
                         "Break Time",
                         controller.calculateTimeDifference(
-                                controller.attendenceModel.value?.breakInTime,
-                                controller
-                                    .attendenceModel.value?.breakOutTime) ??
+                                controller.attendenceModel.value?.breakInTime, controller.attendenceModel.value?.breakOutTime) ??
                             '-',
                         "",
                       );
@@ -157,7 +150,7 @@ class HomePageView extends GetView<HomePageController> {
                     Icons.calendar_today_outlined,
                     "Total Days",
                     controller.countWorkingDays.toString(),
-                    "Working Days",
+                    "Working Days/M",
                   ),
                 ),
               ],
@@ -214,10 +207,8 @@ class HomePageView extends GetView<HomePageController> {
           //? Swipe Button
           Obx(() {
             return controller.attendenceModel.value?.outTime == null &&
-                    (controller.selectedDate.value.year ==
-                            controller.now.year &&
-                        controller.selectedDate.value.month ==
-                            controller.now.month &&
+                    (controller.selectedDate.value.year == controller.now.year &&
+                        controller.selectedDate.value.month == controller.now.month &&
                         controller.selectedDate.value.day == controller.now.day)
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),

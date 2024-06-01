@@ -49,7 +49,7 @@ class UserDataModel {
     totalLeavePending = json['totalLeavePending'];
     totalLeaveCancelled = json['totalLeaveCancelled'];
     companyName = json['companyName'];
-    wrokingDays = json['wrokingDays'].cast<String>();
+    wrokingDays = (json['wrokingDays'])?.cast<String>();
     inTime = json['inTime'];
     outTime = json['outTime'];
     employeeApproved = json['employeeApproved'];
