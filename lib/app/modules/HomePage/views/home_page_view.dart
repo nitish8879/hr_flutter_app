@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hr_application/app/modules/HomePage/model/user_activity_model.dart';
 import 'package:hr_application/app/modules/HomePage/views/user_activity_view.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
 import 'package:hr_application/utils/app_extension.dart';
@@ -235,7 +236,7 @@ class HomePageView extends GetView<HomePageController> {
           }),
           28.height,
           Obx(() {
-            return controller.attendenceModel.value?.inTime != null && controller.attendenceModel.value?.outTime == null
+            return controller.attendenceModel.value?.inTime != null && controller.attendenceModel.value?.outTime == null && controller.userPerformActivty.value != UserPerformActivty.BREAKOUT
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: SwipeButton.expand(
