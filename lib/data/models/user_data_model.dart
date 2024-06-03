@@ -1,7 +1,7 @@
 class UserDataModel {
-  int? userID;
-  int? companyID;
-  int? adminID;
+  String? userID;
+  String? companyID;
+  String? adminID;
   String? username;
   String? fullName;
   String? createdAt;

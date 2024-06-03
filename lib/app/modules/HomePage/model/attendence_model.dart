@@ -1,7 +1,7 @@
 class AttendenceModel {
-  int? id;
-  int? userID;
-  int? companyID;
+  String? id;
+  String? userID;
+  String? companyID;
   String? inTime;
   String? outTime;
   List<String>? breakInTime;

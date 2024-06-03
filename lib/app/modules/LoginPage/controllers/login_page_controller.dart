@@ -11,10 +11,10 @@ import 'package:hr_application/utils/helper_function.dart';
 class LoginPageController extends GetxController {
   String get appImageLogo => AppImages.appLogo;
   var usernameTC = TextEditingController(
-        text: kDebugMode ? "nitish" : null,
+        text: kDebugMode ? "nitish_gupta@tijoree.money" : null,
       ),
       passTC = TextEditingController(
-        text: kDebugMode ? "nitish12" : null,
+        text: kDebugMode ? "nitish_gupta@tijoree.money" : null,
       );
   var isLoading = false.obs;
   @override

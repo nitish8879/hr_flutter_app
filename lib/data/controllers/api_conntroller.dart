@@ -14,7 +14,7 @@ class ApiController extends GetConnect {
   Future<dynamic> callGETAPI({
     required String url,
   }) async {
-    final resp = await get(url).catchError((e) {
+    final resp = await get(Uri.encodeFull(url)).catchError((e) {
       throw e;
     });
     if (resp.isOk) {

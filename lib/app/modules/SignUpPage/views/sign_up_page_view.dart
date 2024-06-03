@@ -1,8 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:hr_application/app/routes/app_pages.dart';
 import 'package:hr_application/utils/app_extension.dart';
 import 'package:hr_application/utils/helper_function.dart';
 import 'package:hr_application/utils/theme/app_colors.dart';
@@ -120,7 +118,9 @@ class SignUpPageView extends GetView<SignUpPageController> {
                   Obx(() {
                     return AppButton.appOulineButtonRow(
                       onPressed: () => openTimePickerdialog(true, context),
-                      label: controller.startTime.value == null ? "Select start time" : formatTimeOfDay(controller.startTime.value!),
+                      label: controller.startTime.value == null
+                          ? "Select start time"
+                          : formatTimeOfDay(controller.startTime.value!),
                       suffixIcon: const Icon(
                         Icons.access_time_outlined,
                         color: AppColors.kBlue600,
@@ -131,7 +131,9 @@ class SignUpPageView extends GetView<SignUpPageController> {
                   Obx(() {
                     return AppButton.appOulineButtonRow(
                       onPressed: () => openTimePickerdialog(false, context),
-                      label: controller.endTime.value == null ? "Select end time" : formatTimeOfDay(controller.endTime.value!),
+                      label: controller.endTime.value == null
+                          ? "Select end time"
+                          : formatTimeOfDay(controller.endTime.value!),
                       suffixIcon: const Icon(
                         Icons.access_time_outlined,
                         color: AppColors.kBlue600,
@@ -155,11 +157,16 @@ class SignUpPageView extends GetView<SignUpPageController> {
                                 label: Text(
                                   controller.workingDays[index].label,
                                   style: Get.textTheme.bodySmall?.copyWith(
-                                    color: controller.workingDays[index].isSelected ? AppColors.kWhite : AppColors.black,
+                                    color:
+                                        controller.workingDays[index].isSelected
+                                            ? AppColors.kWhite
+                                            : AppColors.black,
                                   ),
                                 ),
-                                selected: controller.workingDays[index].isSelected,
-                                onSelected: (value) => controller.onWorkingDaysChange(index),
+                                selected:
+                                    controller.workingDays[index].isSelected,
+                                onSelected: (value) =>
+                                    controller.onWorkingDaysChange(index),
                               ),
                             ).toList(),
                           );
@@ -203,7 +210,8 @@ class SignUpPageView extends GetView<SignUpPageController> {
                         style: Get.textTheme.bodySmall?.copyWith(
                           color: AppColors.kBlue900,
                         ),
-                        recognizer: TapGestureRecognizer()..onTap = controller.gotToLoginPage,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = controller.gotToLoginPage,
                       ),
                     ],
                   ),
@@ -217,7 +225,8 @@ class SignUpPageView extends GetView<SignUpPageController> {
     );
   }
 
-  Future<void> openTimePickerdialog(bool isStartTime, BuildContext context) async {
+  Future<void> openTimePickerdialog(
+      bool isStartTime, BuildContext context) async {
     final selectedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),

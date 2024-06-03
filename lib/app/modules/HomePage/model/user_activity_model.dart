@@ -1,7 +1,7 @@
 class UserActivityModel {
   List<String>? breakOutTime;
   List<String>? breakInTime;
-  int? activityID;
+  String? activityID;
   CheckIn? checkIn;
   OutTime? outTime;
   String? createdAt;

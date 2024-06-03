@@ -9,28 +9,28 @@ class APIUrlsService extends GetxService {
   final String signup = "auth/signup";
   final String dailyInOut = "activity/dailyInOut";
   final String addLeave = "leave/addLeave";
-  String allEmployeeByCompany(int compnayID) => "auth/allEmployees/$compnayID";
-  String allHolidayByCompanyID(int compnayID) => "company/getHoliday?companyId=$compnayID";
+  String allEmployeeByCompany(String compnayID) => "auth/allEmployees/$compnayID";
+  String allHolidayByCompanyID(String compnayID) => "company/getHoliday?companyId=$compnayID";
 
   String getTotalCountLeave(
-    int userID,
-    int compnayID,
+    String userID,
+    String compnayID,
   ) =>
       "auth/getTotalLeave?userID=$userID&companyID=$compnayID";
   String getTotalLeaves(
-    int userID,
-    int compnayID,
+    String userID,
+    String compnayID,
   ) =>
       "leave/getAllLeaves?userID=$userID&companyID=$compnayID";
   String getDataByIDAndCompanyIdAndDate(
-    int id,
-    int compnayID,
+    String id,
+    String compnayID,
     String date,
   ) =>
       "activity/getDataByIDAndCompanyIdAndDate?id=$id&compnayID=$compnayID&date=$date";
   String getActivityList(
-    int id,
-    int compnayID,
+    String id,
+    String compnayID,
     String date,
   ) =>
       "activity/getActivityList?id=$id&compnayID=$compnayID&date=$date";
