@@ -233,7 +233,7 @@ class HomePageView extends GetView<HomePageController> {
                     ),
                   )
                 : const SizedBox();
-          }),
+          }),   
           28.height,
           Obx(() {
             return controller.attendenceModel.value?.inTime != null && controller.attendenceModel.value?.outTime == null && controller.userPerformActivty.value != UserPerformActivty.BREAKOUT

@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 
 class APIUrlsService extends GetxService {
-  static APIUrlsService to = Get.isRegistered<APIUrlsService>() ? Get.find<APIUrlsService>() : Get.put(APIUrlsService());
+  static APIUrlsService to = Get.isRegistered<APIUrlsService>()
+      ? Get.find<APIUrlsService>()
+      : Get.put(APIUrlsService());
   // final String baseURL = "http://10.0.2.2:1010/"; //for App localhost
   final String baseURL = "http://127.0.0.1:1010/"; // for web app localhost
 
@@ -9,8 +11,10 @@ class APIUrlsService extends GetxService {
   final String signup = "auth/signup";
   final String dailyInOut = "activity/dailyInOut";
   final String addLeave = "leave/addLeave";
-  String allEmployeeByCompany(String compnayID) => "auth/allEmployees/$compnayID";
-  String allHolidayByCompanyID(String compnayID) => "company/getHoliday?companyId=$compnayID";
+  String allEmployeeByCompany(String compnayID) =>
+      "auth/allEmployees/$compnayID";
+  String allHolidayByCompanyID(String compnayID) =>
+      "company/getHoliday?companyId=$compnayID";
 
   String getTotalCountLeave(
     String userID,
@@ -34,4 +38,12 @@ class APIUrlsService extends GetxService {
     String date,
   ) =>
       "activity/getActivityList?id=$id&compnayID=$compnayID&date=$date";
+
+  ////////////////////??     TEAMS              ??/////////////////
+  String get addTeam => "team/add";
+  String get addMember => "team/add/member";
+  String fetchTeams(String userID, String companyID, String roleType) =>
+      "team/fetchTeams?userID=$userID&companyID=$companyID&roleType=$roleType";
+  String fetchMembers(String userID, String companyID, String teamID) =>
+      "team/fetchMembers?userID=$userID&companyID=$companyID&teamID=$teamID";
 }

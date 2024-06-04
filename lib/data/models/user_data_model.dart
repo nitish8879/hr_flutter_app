@@ -1,3 +1,5 @@
+import 'package:hr_application/data/app_enums.dart';
+
 class UserDataModel {
   String? userID;
   String? companyID;
@@ -5,7 +7,7 @@ class UserDataModel {
   String? username;
   String? fullName;
   String? createdAt;
-  String? roleType;
+  UserRoleType? roleType;
   int? totalLeaveBalance;
   int? totalLeaveApproved;
   int? totalLeavePending;
@@ -43,7 +45,9 @@ class UserDataModel {
     username = json['username'];
     fullName = json['fullName'];
     createdAt = json['createdAt'];
-    roleType = json['roleType'];
+    if (json['roleType'] != null) {
+      roleType = UserRoleType.fromString(json['roleType']);
+    }
     totalLeaveBalance = json['totalLeaveBalance'];
     totalLeaveApproved = json['totalLeaveApproved'];
     totalLeavePending = json['totalLeavePending'];
@@ -58,23 +62,23 @@ class UserDataModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userID'] = this.userID;
-    data['companyID'] = this.companyID;
-    data['adminID'] = this.adminID;
-    data['username'] = this.username;
-    data['fullName'] = this.fullName;
-    data['createdAt'] = this.createdAt;
-    data['roleType'] = this.roleType;
-    data['totalLeaveBalance'] = this.totalLeaveBalance;
-    data['totalLeaveApproved'] = this.totalLeaveApproved;
-    data['totalLeavePending'] = this.totalLeavePending;
-    data['totalLeaveCancelled'] = this.totalLeaveCancelled;
-    data['companyName'] = this.companyName;
-    data['wrokingDays'] = this.wrokingDays;
-    data['inTime'] = this.inTime;
-    data['outTime'] = this.outTime;
-    data['employeeApproved'] = this.employeeApproved;
-    data['rejectedReason'] = this.rejectedReason;
+    data['userID'] = userID;
+    data['companyID'] = companyID;
+    data['adminID'] = adminID;
+    data['username'] = username;
+    data['fullName'] = fullName;
+    data['createdAt'] = createdAt;
+    data['roleType'] = roleType?.code;
+    data['totalLeaveBalance'] = totalLeaveBalance;
+    data['totalLeaveApproved'] = totalLeaveApproved;
+    data['totalLeavePending'] = totalLeavePending;
+    data['totalLeaveCancelled'] = totalLeaveCancelled;
+    data['companyName'] = companyName;
+    data['wrokingDays'] = wrokingDays;
+    data['inTime'] = inTime;
+    data['outTime'] = outTime;
+    data['employeeApproved'] = employeeApproved;
+    data['rejectedReason'] = rejectedReason;
     return data;
   }
 }

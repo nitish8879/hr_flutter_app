@@ -25,6 +25,16 @@ enum UserRoleType {
     };
   }
 
+  static List<String> get list {
+    return [
+      UserRoleType.superAdmin.code,
+      UserRoleType.admin.code,
+      UserRoleType.manager.code,
+      UserRoleType.watcher.code,
+      UserRoleType.employee.code,
+    ];
+  }
+
   static UserRoleType fromString(String val) {
     return switch (val.toLowerCase()) {
       "superadmin" => UserRoleType.superAdmin,

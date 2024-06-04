@@ -8,6 +8,7 @@ class AppTextField extends StatefulWidget {
   final TextEditingController? controller;
   final EdgeInsetsGeometry? margin;
   final String? Function(String? val)? validator;
+  final void Function(String)? onChanged;
 
   const AppTextField({
     super.key,
@@ -17,6 +18,7 @@ class AppTextField extends StatefulWidget {
     this.controller,
     this.margin,
     this.validator,
+    this.onChanged,
   });
 
   @override
@@ -40,6 +42,7 @@ class _AppTextFieldState extends State<AppTextField> {
         validator: widget.validator,
         controller: widget.controller,
         key: widget.key,
+        onChanged: widget.onChanged,
         obscureText: _obscureText,
         decoration: InputDecoration(
           hintText: widget.hintText,
