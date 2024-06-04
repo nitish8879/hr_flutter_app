@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:hr_application/app/modules/LeavePage/model/leave_activity_model.dart';
+import 'package:hr_application/data/app_enums.dart';
+import 'package:hr_application/data/controllers/app_storage_service.dart';
 import 'package:hr_application/utils/app_extension.dart';
 import 'package:hr_application/utils/theme/app_colors.dart';
 import 'package:hr_application/utils/theme/app_theme.dart';
@@ -49,7 +51,8 @@ class LeaveActivityCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   color: item.leaveStatus?.getColor.withOpacity(.1),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 child: Text(
                   item.leaveStatus?.getName ?? "-",
                   style: Get.textTheme.bodyMedium?.copyWith(
@@ -71,9 +74,35 @@ class LeaveActivityCard extends StatelessWidget {
                 "Apply Days",
                 '${item.todate?.difference(item.fromdate!).inDays.toString() ?? "0"} Days',
               ),
-              _buidlTitleAndSubTitle("Approved By", item.approvalToName ?? "Nitish"),
+              _buidlTitleAndSubTitle(
+                  "Approval", item.approvalTo?.fullName ?? "-"),
             ],
-          )
+          ),
+          if ((AppStorageController.to.currentUser?.roleType ==
+                      UserRoleType.admin ||
+                  AppStorageController.to.currentUser?.roleType ==
+                      UserRoleType.manager) &&
+              AppStorageController.to.currentUser?.userID ==
+                  item.approvalTo?.id) ...[
+            8.height,
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton(
+                    onPressed: () {},
+                    child: Text("Approve"),
+                  ),
+                ),
+                24.width,
+                Expanded(
+                  child: FilledButton(
+                    onPressed: () {},
+                    child: Text("Reject"),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ],
       ),
     );

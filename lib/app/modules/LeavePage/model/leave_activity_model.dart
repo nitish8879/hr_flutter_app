@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hr_application/app/models/team_members_model.dart';
 import 'package:hr_application/utils/theme/app_colors.dart';
 import 'package:intl/intl.dart';
 
 class LeaveActivityModel {
-  int? id;
-  int? userID;
-  int? companyID;
-  int? approvalTo;
-  String? approvalToName;
+  String? id;
+  String? userID;
+  String? companyID;
+  MembersData? approvalTo;
   DateTime? applyDate;
   LeaveActivityState? leaveStatus;
   DateTime? fromdate;
@@ -20,7 +20,6 @@ class LeaveActivityModel {
       this.userID,
       this.companyID,
       this.approvalTo,
-      this.approvalToName,
       this.applyDate,
       this.leaveStatus,
       this.fromdate,
@@ -32,12 +31,11 @@ class LeaveActivityModel {
     id = json['id'];
     userID = json['userID'];
     companyID = json['companyID'];
-    approvalTo = json['approvalTo'];
-    approvalToName = json['approvalToName'];
-    // applyDate = json['applyDate'];
+    if (json['approvalTo'] != null) {
+      approvalTo = MembersData.fromJson(json['approvalTo']);
+    }
     leaveStatus = LeaveActivityState.fromStrings(json['leaveStatus']);
 
-    // fromdate = json['fromdate'];
     if (json['fromdate'] != null) {
       fromdate = DateFormat("yyyy-MM-dd").parse(json['fromdate']);
     }
@@ -47,7 +45,6 @@ class LeaveActivityModel {
     if (json['applyDate'] != null) {
       applyDate = DateFormat("yyyy-MM-dd").parse(json['applyDate']);
     }
-    // todate = json['todate'];
     leaveReason = json['leaveReason'];
     rejectedReason = json['rejectedReason'];
   }
@@ -58,7 +55,6 @@ class LeaveActivityModel {
     data['userID'] = userID;
     data['companyID'] = companyID;
     data['approvalTo'] = approvalTo;
-    data['approvalToName'] = approvalToName;
     data['applyDate'] = applyDate;
     data['leaveStatus'] = leaveStatus;
     data['fromdate'] = fromdate;

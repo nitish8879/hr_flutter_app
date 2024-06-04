@@ -9,6 +9,16 @@ showSuccessSnack(String msg) {
   );
 }
 
+final workingDaysMapping = <String, int>{
+  "MONDAY": 1,
+  "TUESDAY": 2,
+  "WEDNESDAY": 3,
+  "THURSDAY": 4,
+  "FRIDAY": 5,
+  "SATURDAY": 6,
+  "SUNDAY": 7,
+};
+
 showErrorSnack(String msg) {
   Get.closeAllSnackbars();
   Get.snackbar(
@@ -19,6 +29,16 @@ showErrorSnack(String msg) {
 
 closeDialogs() {
   Get.back();
+}
+
+List<int> workingDays(List<String> days) {
+  List<int> workingDays = [];
+  for (var element in days) {
+    if (workingDaysMapping.containsKey(element)) {
+      workingDays.add(workingDaysMapping[element]!);
+    }
+  }
+  return workingDays;
 }
 
 String secondsToTime(int seconds) {

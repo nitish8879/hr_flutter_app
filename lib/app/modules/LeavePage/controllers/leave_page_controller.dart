@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hr_application/app/modules/LeavePage/model/leave_activity_model.dart';
-import 'package:hr_application/app/modules/LeavePage/model/leave_total_count.dart';
 import 'package:hr_application/data/controllers/api_conntroller.dart';
 import 'package:hr_application/data/controllers/api_url_service.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
@@ -9,13 +8,13 @@ import 'package:hr_application/utils/app_extension.dart';
 import 'package:hr_application/utils/helper_function.dart';
 
 class LeavePageController extends GetxController {
-  var tabSelected = Rxn(LeaveActivityState.approved);
+  var tabSelected = Rxn(LeaveActivityState.pending);
   var leaveActivities = <LeaveActivityModel>[].obs;
-  var leavTotalCount = Rxn<LeaveTotalCountModel?>(null);
   var mainList = <LeaveActivityModel>[];
   var leavereasonTC = TextEditingController();
   var leaveStartDate = Rxn<DateTime?>(), leaveEndDate = Rxn<DateTime?>();
-
+  var totalCount = {}.obs;
+  var myData = false.obs;
   @override
   void onInit() {
     super.onInit();
@@ -24,21 +23,16 @@ class LeavePageController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    getTotalLeave();
-    getAllLeaves();
-  }
-
-  Future<void> onRefresh() async {
-    getTotalLeave();
     getAllLeaves();
   }
 
   void onTabChange(LeaveActivityState newState) {
     // if (newState == tabSelected.value) return;
-    tabSelected.value = newState;
     leaveActivities.clear();
-    leaveActivities.addAll(mainList.where((element) => element.leaveStatus == newState));
+    leaveActivities
+        .addAll(mainList.where((element) => element.leaveStatus == newState));
     print(leaveActivities.length);
+    tabSelected.value = newState;
   }
 
   void appllyLeave() {
@@ -59,50 +53,46 @@ class LeavePageController extends GetxController {
         leaveStartDate.value = null;
         leaveEndDate.value = null;
         Get.back();
-
-        onRefresh();
+        getAllLeaves();
       } else {
         showErrorSnack((resp['errorMsg'] ?? resp).toString());
       }
     });
   }
 
-  void getTotalLeave() {
-    ApiController.to
-        .callGETAPI(
-      url: APIUrlsService.to.getTotalCountLeave(
-        AppStorageController.to.currentUser!.userID!,
-        AppStorageController.to.currentUser!.companyID!,
-      ),
-    )
-        .then((resp) {
-      if (resp != null && resp['status']) {
-        leavTotalCount.value = LeaveTotalCountModel.fromJson(resp['data']);
-        print(leavTotalCount.value?.toJson() ?? "Got null in Total leave count");
-      } else {
-        showErrorSnack(resp.toString());
-      }
-    }).catchError(
-      (e) {
-        showErrorSnack(e.toString());
-      },
-    );
-  }
-
   void getAllLeaves() {
     ApiController.to
         .callGETAPI(
-      url: APIUrlsService.to.getTotalLeaves(
+      url: APIUrlsService.to.getAllLeaves(
         AppStorageController.to.currentUser!.userID!,
         AppStorageController.to.currentUser!.companyID!,
+        AppStorageController.to.currentUser!.roleType!.code,
+        myData.value,
       ),
     )
         .then((resp) {
+      leaveActivities.clear();
+      mainList.clear();
       if (resp != null && resp['status']) {
-        leaveActivities.clear();
-        mainList.clear();
-        mainList.addAll((resp['data'] as List<dynamic>).map((e) => LeaveActivityModel.fromJson(e)).toList());
-        onTabChange(LeaveActivityState.approved);
+        if (resp['data'] is List<dynamic>) {
+          totalCount.value = {};
+          mainList.addAll(
+            (resp['data'] as List<dynamic>)
+                .map((e) => LeaveActivityModel.fromJson(e))
+                .toList(),
+          );
+        } else {
+          totalCount.value = {
+            "totalLeavebalance": resp['totalLeavebalance'],
+            "totalWFHbalance": resp['totalWFHbalance'],
+          };
+          mainList.addAll(
+            (resp['data']['data'] as List<dynamic>)
+                .map((e) => LeaveActivityModel.fromJson(e))
+                .toList(),
+          );
+        }
+        onTabChange(LeaveActivityState.pending);
       } else {
         showErrorSnack(resp.toString());
       }
@@ -117,5 +107,10 @@ class LeavePageController extends GetxController {
   void onClose() {
     leavereasonTC.dispose();
     super.onClose();
+  }
+
+  void myDataChanged(bool value) {
+    myData.value = value;
+    getAllLeaves();
   }
 }

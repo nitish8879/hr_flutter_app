@@ -144,8 +144,15 @@ class AllEmployesPageView extends GetView<AllEmployesPageController> {
   }
 
   void addMembersDialog() {
-    String fullName = "",username = "";
+    String fullName = "", username = "";
     UserRoleType selectedRole = UserRoleType.watcher;
+    List<String> list = List.from(UserRoleType.list);
+    if (AppStorageController.to.currentUser?.roleType ==
+            UserRoleType.superAdmin ||
+        AppStorageController.to.currentUser?.roleType == UserRoleType.admin) {
+      list.removeWhere((element) => element == UserRoleType.superAdmin.code);
+      list.removeWhere((element) => element == UserRoleType.admin.code);
+    }
     Get.defaultDialog(
       title: "Add Member",
       content: Column(
@@ -162,7 +169,7 @@ class AllEmployesPageView extends GetView<AllEmployesPageController> {
           ),
           StatefulBuilder(builder: (context, s) {
             return DropdownButton(
-              items: UserRoleType.list
+              items: list
                   .map(
                     (e) => DropdownMenuItem(
                       value: e,
@@ -180,7 +187,7 @@ class AllEmployesPageView extends GetView<AllEmployesPageController> {
         ],
       ),
       textCancel: "Cancel",
-      onConfirm: () => controller.addMembers(fullName,username,selectedRole),
+      onConfirm: () => controller.addMembers(fullName, username, selectedRole),
       textConfirm: "Add Member",
     );
   }

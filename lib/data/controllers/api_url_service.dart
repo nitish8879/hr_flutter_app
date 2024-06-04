@@ -7,25 +7,16 @@ class APIUrlsService extends GetxService {
   // final String baseURL = "http://10.0.2.2:1010/"; //for App localhost
   final String baseURL = "http://127.0.0.1:1010/"; // for web app localhost
 
+  ////////// ?? AUTH          ??/////////////
   final String login = "auth/signin";
   final String signup = "auth/signup";
-  final String dailyInOut = "activity/dailyInOut";
-  final String addLeave = "leave/addLeave";
-  String allEmployeeByCompany(String compnayID) =>
-      "auth/allEmployees/$compnayID";
-  String allHolidayByCompanyID(String compnayID) =>
-      "company/getHoliday?companyId=$compnayID";
+  String updatePassword(
+          String username, String oldpassword, String reenterPassword) =>
+      "auth/updatePassword?username=$username&oldpassword=$oldpassword&newpassword=$reenterPassword";
 
-  String getTotalCountLeave(
-    String userID,
-    String compnayID,
-  ) =>
-      "auth/getTotalLeave?userID=$userID&companyID=$compnayID";
-  String getTotalLeaves(
-    String userID,
-    String compnayID,
-  ) =>
-      "leave/getAllLeaves?userID=$userID&companyID=$compnayID";
+  //////////////////?? Home Page API     ??////////////////
+  final String dailyInOut = "activity/dailyInOut";
+
   String getDataByIDAndCompanyIdAndDate(
     String id,
     String compnayID,
@@ -38,6 +29,25 @@ class APIUrlsService extends GetxService {
     String date,
   ) =>
       "activity/getActivityList?id=$id&compnayID=$compnayID&date=$date";
+
+  //////////////?? HOLIDAY   ??/////////////
+  String allHolidayByCompanyID(String compnayID) =>
+      "company/getHoliday?companyId=$compnayID";
+
+  ////////// ?? Leave ??///////////////////
+  final String addLeave = "leave/addLeave";
+  String getTotalCountLeave(
+    String userID,
+    String compnayID,
+  ) =>
+      "auth/getTotalLeave?userID=$userID&companyID=$compnayID";
+  String getAllLeaves(
+    String userID,
+    String compnayID,
+    String roleType,
+    bool myLeave
+  ) =>
+      "leave/getAllLeaves?userID=$userID&companyID=$compnayID&roleType=$roleType&myLeave=$myLeave";
 
   ////////////////////??     TEAMS              ??/////////////////
   String get addTeam => "team/add";
