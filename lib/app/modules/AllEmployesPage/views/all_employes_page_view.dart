@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hr_application/app/models/teams_model.dart';
 import 'package:hr_application/data/app_enums.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
 import 'package:hr_application/data/models/user_data_model.dart';
@@ -79,23 +80,29 @@ class AllEmployesPageView extends GetView<AllEmployesPageController> {
                       "Members",
                       style: Get.textTheme.headlineSmall,
                     ),
-                    FutureBuilder<UserDataModel?>(
-                      future: AppStorageController.to.asyncCurrentUser,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                                ConnectionState.waiting ||
-                            (snapshot.data?.roleType == UserRoleType.watcher) ||
-                            (snapshot.data?.roleType ==
-                                UserRoleType.employee) ||
-                            (snapshot.data?.roleType == UserRoleType.manager)) {
-                          return const SizedBox();
-                        }
-                        return IconButton(
-                          onPressed: addMembersDialog,
-                          icon: const Icon(Icons.person),
-                        );
-                      },
-                    )
+                    Obx(() {
+                      controller.isTeamLoading.value;
+                      return FutureBuilder<UserDataModel?>(
+                        future: AppStorageController.to.asyncCurrentUser,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                                  ConnectionState.waiting ||
+                              (snapshot.data?.roleType ==
+                                  UserRoleType.watcher) ||
+                              (snapshot.data?.roleType ==
+                                  UserRoleType.employee) ||
+                              (snapshot.data?.roleType ==
+                                  UserRoleType.manager) ||
+                              controller.teams.isEmpty) {
+                            return const SizedBox();
+                          }
+                          return IconButton(
+                            onPressed: addMembersDialog,
+                            icon: const Icon(Icons.person),
+                          );
+                        },
+                      );
+                    })
                   ],
                 ),
               ),
@@ -146,10 +153,14 @@ class AllEmployesPageView extends GetView<AllEmployesPageController> {
   void addMembersDialog() {
     String fullName = "", username = "";
     UserRoleType selectedRole = UserRoleType.watcher;
+    TeamsModel selectedTeam = controller.teams.first;
+
     List<String> list = List.from(UserRoleType.list);
     if (AppStorageController.to.currentUser?.roleType ==
-            UserRoleType.superAdmin ||
-        AppStorageController.to.currentUser?.roleType == UserRoleType.admin) {
+        UserRoleType.superAdmin) {
+      list.removeWhere((element) => element == UserRoleType.superAdmin.code);
+    }
+    if (AppStorageController.to.currentUser?.roleType == UserRoleType.admin) {
       list.removeWhere((element) => element == UserRoleType.superAdmin.code);
       list.removeWhere((element) => element == UserRoleType.admin.code);
     }
@@ -167,6 +178,27 @@ class AllEmployesPageView extends GetView<AllEmployesPageController> {
             hintText: "Email",
             onChanged: (p) => username = p,
           ),
+          8.height,
+          //? TEAMS
+          StatefulBuilder(builder: (context, s) {
+            return DropdownButton<TeamsModel>(
+              items: controller.teams
+                  .map(
+                    (e) => DropdownMenuItem<TeamsModel>(
+                      value: e,
+                      child: Text(e.teamName ?? "?"),
+                    ),
+                  )
+                  .toList(),
+              value: selectedTeam,
+              onChanged: (a) {
+                selectedTeam = a!;
+                s(() {});
+              },
+            );
+          }),
+          8.height,
+          //? ROLE
           StatefulBuilder(builder: (context, s) {
             return DropdownButton(
               items: list
@@ -245,12 +277,12 @@ class AllEmployesPageView extends GetView<AllEmployesPageController> {
             const SizedBox(width: double.maxFinite),
             Text(controller.members?.members?[index].fullName ?? "-"),
             Text(controller.members?.members?[index].userName ?? "-"),
-            if (controller.members?.members?[index].id ==
-                controller.members?.manager?.id) ...[
-              6.height,
-              const Text("Manager"),
-              6.height,
-            ]
+            Text(controller.members?.members?[index].roleType ?? "-"),
+            // if (controller.members?.members?[index].id ==
+            //     controller.members?.manager?.id) ...[
+            //   6.height,
+            //   6.height,
+            // ]
           ],
         ),
       ),
