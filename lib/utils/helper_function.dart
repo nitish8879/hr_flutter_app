@@ -3,10 +3,7 @@ import 'package:get/get.dart';
 
 showSuccessSnack(String msg) {
   Get.closeAllSnackbars();
-  Get.snackbar(
-    "Success",
-    msg,
-  );
+  Get.snackbar("Success", msg, messageText: Text(msg, maxLines: 4));
 }
 
 final workingDaysMapping = <String, int>{
@@ -21,10 +18,7 @@ final workingDaysMapping = <String, int>{
 
 showErrorSnack(String msg) {
   Get.closeAllSnackbars();
-  Get.snackbar(
-    "Error",
-    msg,
-  );
+  Get.snackbar("Error", msg, messageText: Text(msg, maxLines: 4));
 }
 
 closeDialogs() {

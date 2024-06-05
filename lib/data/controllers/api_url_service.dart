@@ -36,24 +36,37 @@ class APIUrlsService extends GetxService {
 
   ////////// ?? Leave ??///////////////////
   final String addLeave = "leave/addLeave";
+
   String getTotalCountLeave(
     String userID,
     String compnayID,
   ) =>
       "auth/getTotalLeave?userID=$userID&companyID=$compnayID";
-  String getAllLeaves(
+
+  String approveRejectLeave(
     String userID,
     String compnayID,
-    String roleType,
-    bool myLeave
+    String employeeID,
+    String leaveID,
+    String rejectReason,
+    String leaveStatus,
   ) =>
+      "auth/approveReject?userID=$userID&companyID=$compnayID&leaveID=$leaveID&employeeID=$employeeID&rejectReason$rejectReason";
+  String getAllLeaves(
+          String userID, String compnayID, String roleType, bool myLeave) =>
       "leave/getAllLeaves?userID=$userID&companyID=$compnayID&roleType=$roleType&myLeave=$myLeave";
 
   ////////////////////??     TEAMS              ??/////////////////
   String get addTeam => "team/add";
+
   String get addMember => "team/add/member";
+
+  String fetchAllAdminManagerByCompany(String companyID, String userID) =>
+      "team/fetchAllAdminManagerByCompany?companyID=$companyID&userId=$userID";
+
   String fetchTeams(String userID, String companyID, String roleType) =>
       "team/fetchTeams?userID=$userID&companyID=$companyID&roleType=$roleType";
+
   String fetchMembers(String userID, String companyID, String teamID) =>
       "team/fetchMembers?userID=$userID&companyID=$companyID&teamID=$teamID";
 }

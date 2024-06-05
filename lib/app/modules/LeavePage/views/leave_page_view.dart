@@ -6,7 +6,6 @@ import 'package:hr_application/data/app_enums.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
 import 'package:hr_application/utils/app_extension.dart';
 import 'package:hr_application/utils/theme/app_colors.dart';
-import 'package:hr_application/utils/theme/app_theme.dart';
 import 'package:hr_application/widgets/leave_activity_card.dart';
 
 import '../controllers/leave_page_controller.dart';
@@ -26,10 +25,8 @@ class LeavePageView extends GetView<LeavePageController> {
           ),
           14.width,
           //? ADD Button
-          if ((AppStorageController.to.currentUser?.roleType ==
-                  UserRoleType.admin ||
-              AppStorageController.to.currentUser?.roleType ==
-                  UserRoleType.manager)) ...[
+          if (AppStorageController.to.currentUser?.roleType !=
+              UserRoleType.superAdmin) ...[
             Row(
               children: [
                 IconButton.outlined(
@@ -135,43 +132,6 @@ class LeavePageView extends GetView<LeavePageController> {
     );
   }
 
-  _buildLeaveUI(String label, count) {
-    return Align(
-      alignment: Alignment.center,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        child: Ink(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          decoration: BoxDecoration(
-            color: AppColors.kFoundationPurple700,
-            borderRadius: borderRadius,
-            border: Border.all(
-              color: AppColors.kBorderColor,
-              width: 1,
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                (count ?? '-').toString(),
-                style: Get.textTheme.headlineMedium?.copyWith(
-                  color: AppColors.kWhite,
-                ),
-              ),
-              Text(
-                label,
-                style: Get.textTheme.bodyMedium?.copyWith(
-                  color: AppColors.kWhite,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildLeavList() {
     return Obx(() {
       return (controller.leaveActivities.isEmpty)
@@ -183,6 +143,11 @@ class LeavePageView extends GetView<LeavePageController> {
               itemBuilder: (context, index) {
                 return LeaveActivityCard(
                   item: controller.leaveActivities[index],
+                  approveRejectTap: (status) =>
+                      controller.handleApproveRejectTap(
+                    status,
+                    controller.leaveActivities[index],
+                  ),
                 );
               },
             );

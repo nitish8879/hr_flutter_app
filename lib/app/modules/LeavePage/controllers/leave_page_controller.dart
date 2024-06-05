@@ -148,4 +148,19 @@ class LeavePageController extends GetxController {
     myData.value = value;
     getAllLeaves();
   }
+
+  Future<void> handleApproveRejectTap(
+      LeaveActivityState status, LeaveActivityModel leaveActiviti) async {
+    ApiController.to.callPOSTAPI(
+      url: url,
+      body: {
+        "leaveID": "",
+        "userID": "",
+        "companyID": "",
+        "rejectReason": "",
+        "leaveStatus": "",
+        "employeeID": "",
+      },
+    );
+  }
 }

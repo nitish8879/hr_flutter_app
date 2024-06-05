@@ -14,23 +14,29 @@ class LeaveActivityModel {
   DateTime? todate;
   String? leaveReason;
   String? rejectedReason;
+  MembersData? user;
 
-  LeaveActivityModel(
-      {this.id,
-      this.userID,
-      this.companyID,
-      this.approvalTo,
-      this.applyDate,
-      this.leaveStatus,
-      this.fromdate,
-      this.todate,
-      this.leaveReason,
-      this.rejectedReason});
+  LeaveActivityModel({
+    this.id,
+    this.userID,
+    this.companyID,
+    this.approvalTo,
+    this.applyDate,
+    this.leaveStatus,
+    this.fromdate,
+    this.todate,
+    this.leaveReason,
+    this.rejectedReason,
+    this.user,
+  });
 
   LeaveActivityModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userID = json['userID'];
     companyID = json['companyID'];
+    if (json['user'] != null) {
+      user = MembersData.fromJson(json['user']);
+    }
     if (json['approvalTo'] != null) {
       approvalTo = MembersData.fromJson(json['approvalTo']);
     }

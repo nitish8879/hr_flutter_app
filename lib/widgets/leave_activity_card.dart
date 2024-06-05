@@ -9,9 +9,11 @@ import 'package:hr_application/utils/theme/app_theme.dart';
 
 class LeaveActivityCard extends StatelessWidget {
   final LeaveActivityModel item;
+  final void Function(LeaveActivityState state)? approveRejectTap;
   const LeaveActivityCard({
     super.key,
     required this.item,
+    this.approveRejectTap,
   });
 
   @override
@@ -79,6 +81,8 @@ class LeaveActivityCard extends StatelessWidget {
             ],
           ),
           if ((AppStorageController.to.currentUser?.roleType ==
+                      UserRoleType.superAdmin ||
+                  AppStorageController.to.currentUser?.roleType ==
                       UserRoleType.admin ||
                   AppStorageController.to.currentUser?.roleType ==
                       UserRoleType.manager) &&
@@ -89,15 +93,19 @@ class LeaveActivityCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: FilledButton(
-                    onPressed: () {},
-                    child: Text("Approve"),
+                    onPressed: () => approveRejectTap != null
+                        ? approveRejectTap!(LeaveActivityState.approved)
+                        : null,
+                    child: const Text("Approve"),
                   ),
                 ),
                 24.width,
                 Expanded(
                   child: FilledButton(
-                    onPressed: () {},
-                    child: Text("Reject"),
+                    onPressed: () => approveRejectTap != null
+                        ? approveRejectTap!(LeaveActivityState.rejected)
+                        : null,
+                    child: const Text("Reject"),
                   ),
                 ),
               ],
