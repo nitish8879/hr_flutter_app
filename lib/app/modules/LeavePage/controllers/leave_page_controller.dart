@@ -8,6 +8,7 @@ import 'package:hr_application/data/controllers/api_url_service.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
 import 'package:hr_application/utils/app_extension.dart';
 import 'package:hr_application/utils/helper_function.dart';
+import 'package:hr_application/widgets/app_textfield.dart';
 
 class LeavePageController extends GetxController {
   var tabSelected = Rxn(LeaveActivityState.pending);
@@ -150,17 +151,58 @@ class LeavePageController extends GetxController {
   }
 
   Future<void> handleApproveRejectTap(
-      LeaveActivityState status, LeaveActivityModel leaveActiviti) async {
-    ApiController.to.callPOSTAPI(
-      url: url,
+    LeaveActivityState status,
+    LeaveActivityModel item,
+  ) async {
+    if (status == LeaveActivityState.rejected) {
+      String rejectReason = "";
+      Get.defaultDialog<void>(
+        title: "Reject",
+        content: AppTextField(
+          hintText: "enter reject reason",
+          onChanged: (a) => rejectReason = a,
+        ),
+        textCancel: "Cancel",
+        textConfirm: "Update",
+        onCancel: closeDialogs,
+        onConfirm: () {
+          if (rejectReason.trim().isEmpty) {
+            showErrorSnack("Enter reject reason");
+            return;
+          }
+          closeDialogs();
+          updateLeave(status: status, item: item, rejectReason: rejectReason);
+        },
+      );
+    } else {
+      updateLeave(status: status, item: item);
+    }
+  }
+
+  Future<void> updateLeave({
+    required LeaveActivityState status,
+    required LeaveActivityModel item,
+    String? rejectReason,
+  }) async {
+    final resp = await ApiController.to.callPOSTAPI(
+      url: APIUrlsService.to.approveRejectLeave,
       body: {
-        "leaveID": "",
-        "userID": "",
-        "companyID": "",
-        "rejectReason": "",
-        "leaveStatus": "",
-        "employeeID": "",
+        "leaveID": item.id,
+        "userID": AppStorageController.to.currentUser?.userID,
+        "companyID": AppStorageController.to.currentUser?.companyID,
+        "rejectReason": rejectReason,
+        "leaveStatus": status.code,
+        "employeeID": item.user?.id,
+      },
+    ).catchError(
+      (e) {
+        showErrorSnack(e.toString());
       },
     );
+    if (resp != null && resp is Map<String, dynamic> && resp['status']) {
+      getAllLeaves();
+    } else {
+      showErrorSnack(resp.toString());
+    }
   }
 }

@@ -36,22 +36,9 @@ class APIUrlsService extends GetxService {
 
   ////////// ?? Leave ??///////////////////
   final String addLeave = "leave/addLeave";
+  
+  String get approveRejectLeave => "leave/approveReject";
 
-  String getTotalCountLeave(
-    String userID,
-    String compnayID,
-  ) =>
-      "auth/getTotalLeave?userID=$userID&companyID=$compnayID";
-
-  String approveRejectLeave(
-    String userID,
-    String compnayID,
-    String employeeID,
-    String leaveID,
-    String rejectReason,
-    String leaveStatus,
-  ) =>
-      "auth/approveReject?userID=$userID&companyID=$compnayID&leaveID=$leaveID&employeeID=$employeeID&rejectReason$rejectReason";
   String getAllLeaves(
           String userID, String compnayID, String roleType, bool myLeave) =>
       "leave/getAllLeaves?userID=$userID&companyID=$compnayID&roleType=$roleType&myLeave=$myLeave";

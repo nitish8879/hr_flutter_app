@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:hr_application/app/models/team_members_model.dart';
 import 'package:hr_application/utils/theme/app_colors.dart';
@@ -94,6 +95,14 @@ enum LeaveActivityState {
         return LeaveActivityState.rejected;
     }
     return null;
+  }
+
+  String get code {
+    return switch (this) {
+      (pending) => "PENDING",
+      (approved) => "APPROVED",
+      (rejected) => "REJECTED",
+    };
   }
 
   String get getName {

@@ -80,14 +80,15 @@ class LeaveActivityCard extends StatelessWidget {
                   "Approval", item.approvalTo?.fullName ?? "-"),
             ],
           ),
-          if ((AppStorageController.to.currentUser?.roleType ==
-                      UserRoleType.superAdmin ||
-                  AppStorageController.to.currentUser?.roleType ==
-                      UserRoleType.admin ||
-                  AppStorageController.to.currentUser?.roleType ==
-                      UserRoleType.manager) &&
-              AppStorageController.to.currentUser?.userID ==
-                  item.approvalTo?.id) ...[
+          if (((AppStorageController.to.currentUser?.roleType ==
+                          UserRoleType.superAdmin ||
+                      AppStorageController.to.currentUser?.roleType ==
+                          UserRoleType.admin ||
+                      AppStorageController.to.currentUser?.roleType ==
+                          UserRoleType.manager) &&
+                  AppStorageController.to.currentUser?.userID ==
+                      item.approvalTo?.id) &&
+              item.leaveStatus == LeaveActivityState.pending) ...[
             8.height,
             Row(
               children: [
@@ -111,6 +112,15 @@ class LeaveActivityCard extends StatelessWidget {
               ],
             ),
           ],
+          if (item.leaveStatus == LeaveActivityState.rejected) ...[
+            const Divider(
+              color: AppColors.kGrey100,
+            ),
+            _buidlTitleAndSubTitle(
+              "Rejected Reason",
+              item.rejectedReason ?? "-",
+            ),
+          ]
         ],
       ),
     );
