@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
-import 'package:hr_application/app/modules/LeavePage/controllers/leave_page_controller.dart';
+import 'package:hr_application/app/routes/app_pages.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
 import 'package:hr_application/utils/app_extension.dart';
 import 'package:hr_application/utils/helper_function.dart';
@@ -8,13 +9,23 @@ import 'package:hr_application/utils/theme/app_colors.dart';
 import 'package:hr_application/widgets/app_button.dart';
 import 'package:hr_application/widgets/app_textfield.dart';
 
-class ApplyLeavePageView extends GetView<LeavePageController> {
-  const ApplyLeavePageView({super.key});
+import '../controllers/apply_leave_page_controller.dart';
 
+class ApplyLeavePageView extends GetView<ApplyLeavePageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            if (Get.previousRoute.isEmpty) {
+              Get.offAllNamed(AppPages.INITIAL);
+            } else {
+              Get.back();
+            }
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
         title: const Text("Apply Leave"),
         centerTitle: true,
       ),
@@ -49,6 +60,25 @@ class ApplyLeavePageView extends GetView<LeavePageController> {
             hintText: "Reason for leave",
             controller: controller.leavereasonTC,
           ),
+          16.height,
+          Text("Select Approval Person"),
+          // StatefulBuilder(builder: (context, s) {
+          //   return DropdownButton(
+          //     items: list
+          //         .map(
+          //           (e) => DropdownMenuItem(
+          //             value: e,
+          //             child: Text(e),
+          //           ),
+          //         )
+          //         .toList(),
+          //     value: selectedRole.code,
+          //     onChanged: (a) {
+          //       selectedRole = UserRoleType.fromString(a!);
+          //       s(() {});
+          //     },
+          //   );
+          // }),
           16.height,
           AppButton.appButton(
             onPressed: controller.appllyLeave,

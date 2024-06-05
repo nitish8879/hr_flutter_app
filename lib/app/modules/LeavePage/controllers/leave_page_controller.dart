@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hr_application/app/models/teams_model.dart';
 import 'package:hr_application/app/modules/LeavePage/model/leave_activity_model.dart';
+import 'package:hr_application/app/routes/app_pages.dart';
 import 'package:hr_application/data/controllers/api_conntroller.dart';
 import 'package:hr_application/data/controllers/api_url_service.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
@@ -15,6 +17,9 @@ class LeavePageController extends GetxController {
   var leaveStartDate = Rxn<DateTime?>(), leaveEndDate = Rxn<DateTime?>();
   var totalCount = {}.obs;
   var myData = false.obs;
+  var isTeamLoading = true.obs;
+  var teams = <TeamsModel>[];
+  TeamsModel? selectedTeam;
   @override
   void onInit() {
     super.onInit();
@@ -33,6 +38,36 @@ class LeavePageController extends GetxController {
         .addAll(mainList.where((element) => element.leaveStatus == newState));
     print(leaveActivities.length);
     tabSelected.value = newState;
+  }
+
+  Future<void> fetchAllTeams() async {
+    if (!isTeamLoading.value) {
+      isTeamLoading.value = true;
+    }
+    await AppStorageController.to.asyncCurrentUser;
+    final resp = await ApiController.to
+        .callGETAPI(
+      url: APIUrlsService.to.fetchTeams(
+        AppStorageController.to.currentUser!.userID!,
+        AppStorageController.to.currentUser!.companyID!,
+        AppStorageController.to.currentUser!.roleType!.code,
+      ),
+    )
+        .catchError((e) {
+      isTeamLoading.value = true;
+    });
+    if (resp != null && resp is List<dynamic>) {
+      teams.clear();
+      teams.addAll(
+        (resp).map((e) => TeamsModel.fromJson(e)).toList(),
+      );
+      if (teams.isNotEmpty) {
+        selectedTeam = teams.first;
+      }
+      isTeamLoading.value = false;
+    } else {
+      showErrorSnack((resp['errorMsg'] ?? resp).toString());
+    }
   }
 
   void appllyLeave() {

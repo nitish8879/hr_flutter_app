@@ -12,6 +12,7 @@ abstract class Routes {
   static const HOLIDAY_PAGE = _Paths.HOLIDAY_PAGE;
   static const PROFILE_PAGE = _Paths.PROFILE_PAGE;
   static const ALL_EMPLOYES_PAGE = _Paths.ALL_EMPLOYES_PAGE;
+  static const APPLY_LEAVE_PAGE = _Paths.APPLY_LEAVE_PAGE;
 }
 
 abstract class _Paths {
@@ -25,4 +26,5 @@ abstract class _Paths {
   static const HOLIDAY_PAGE = '/holiday-page';
   static const PROFILE_PAGE = '/profile-page';
   static const ALL_EMPLOYES_PAGE = '/all-employes-page';
+  static const APPLY_LEAVE_PAGE = '/apply-leave-page';
 }

@@ -10,8 +10,8 @@ import 'package:hr_application/utils/helper_function.dart';
 
 class AllEmployesPageController extends GetxController {
   var teams = <TeamsModel>[];
-  MemberModel? members;
   TeamsModel? selectedTeam;
+  MemberModel? members;
   var isTeamLoading = true.obs, isMemberLoading = false.obs;
 
   @override

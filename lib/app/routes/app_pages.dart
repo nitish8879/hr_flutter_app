@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
 
+import 'package:hr_application/app/modules/ApplyLeavePage/bindings/apply_leave_page_binding.dart';
+import 'package:hr_application/app/modules/ApplyLeavePage/views/apply_leave_page_view.dart';
+
 import '../modules/AllEmployesPage/bindings/all_employes_page_binding.dart';
 import '../modules/AllEmployesPage/views/all_employes_page_view.dart';
 import '../modules/DashboardPage/bindings/dashboard_page_binding.dart';
@@ -71,6 +74,11 @@ class AppPages {
       name: _Paths.ALL_EMPLOYES_PAGE,
       page: () => const AllEmployesPageView(),
       binding: AllEmployesPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.APPLY_LEAVE_PAGE,
+      page: () => ApplyLeavePageView(),
+      binding: ApplyLeavePageBinding(),
     ),
   ];
 }

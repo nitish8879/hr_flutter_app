@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hr_application/app/modules/LeavePage/model/leave_activity_model.dart';
-import 'package:hr_application/app/modules/LeavePage/views/apply_leave_page_view.dart';
+import 'package:hr_application/app/routes/app_pages.dart';
 import 'package:hr_application/data/app_enums.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
 import 'package:hr_application/utils/app_extension.dart';
@@ -12,7 +12,7 @@ import 'package:hr_application/widgets/leave_activity_card.dart';
 import '../controllers/leave_page_controller.dart';
 
 class LeavePageView extends GetView<LeavePageController> {
-  const LeavePageView({Key? key}) : super(key: key);
+  const LeavePageView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +33,7 @@ class LeavePageView extends GetView<LeavePageController> {
             Row(
               children: [
                 IconButton.outlined(
-                  onPressed: () => Get.to(() => const ApplyLeavePageView()),
+                  onPressed: () => Get.toNamed(Routes.APPLY_LEAVE_PAGE),
                   icon: const Icon(Icons.add),
                 ),
                 14.width,
