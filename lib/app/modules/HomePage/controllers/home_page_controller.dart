@@ -163,7 +163,8 @@ class HomePageController extends GetxController {
     }
     DateFormat format = DateFormat("HH:mm:ss");
     //i=2
-    for (int i = 0; i < times.length; i = i + 2) {
+    for (int i = 0; i < times.length-1; i = i + 2) {
+      print("$i ${times.length}");
       if (i > times.length) {
         break;
       }
