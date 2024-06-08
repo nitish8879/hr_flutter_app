@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hr_application/app/modules/SignUpPage/model/working_days_model.dart';
+import 'package:hr_application/data/app_enums.dart';
+import 'package:hr_application/data/controllers/api_conntroller.dart';
+import 'package:hr_application/data/controllers/api_url_service.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
+import 'package:hr_application/utils/helper_function.dart';
 
 class ProfilePageController extends GetxController {
   var userName = TextEditingController(text: AppStorageController.to.currentUser?.username);
@@ -47,6 +51,52 @@ class ProfilePageController extends GetxController {
   onWorkingDaysChange(int index) {
     workingDays[index].isSelected = !workingDays[index].isSelected;
     workingDays.refresh();
+  }
+
+  Future<void> updateCompany() async {
+    if (AppStorageController.to.currentUser?.roleType != UserRoleType.superAdmin) {
+      showErrorSnack("Super admin can edit this only");
+    } else {
+      List<WorkingDaysModel> tempWorkingdays = List.from(workingDays.value);
+      tempWorkingdays.removeWhere((element) => !element.isSelected);
+      final resp = await ApiController.to.callPOSTAPI(
+        url: APIUrlsService.to.updateCompany,
+        body: {
+          "userId": AppStorageController.to.currentUser?.userID,
+          "companyID": AppStorageController.to.currentUser?.companyID,
+          "companyName": organizationTC.text,
+          "inTime": formatTimeOfDay(startTime.value!),
+          "outTime": formatTimeOfDay(endTime.value!),
+          "workingDays": tempWorkingdays.map((e) => e.code).toList(),
+        },
+      ).catchError((e) {
+        Get.defaultDialog(
+          title: "Error",
+          content: Text(
+            e.toString(),
+            maxLines: 4,
+          ),
+        );
+      });
+      if (resp is Map<String, dynamic>) {
+        if (resp['status']) {
+          showSuccessSnack("Company Data Updated");
+          AppStorageController.to.currentUser?.wrokingDays = (resp['data']['workingDays'] as List<dynamic>).cast<String>();
+          AppStorageController.to.currentUser?.outTime = resp['data']['outTime'];
+          AppStorageController.to.currentUser?.inTime = resp['data']['inTime'];
+          AppStorageController.to.currentUser?.companyName = resp['data']['companyName'];
+          await AppStorageController.to.saveUserData(AppStorageController.to.currentUser!.toJson());
+        } else {
+          Get.defaultDialog(
+            title: "Error",
+            content: Text(
+              (resp['errorMsg'] ?? resp).toString(),
+              maxLines: 4,
+            ),
+          );
+        }
+      }
+    }
   }
 
   @override

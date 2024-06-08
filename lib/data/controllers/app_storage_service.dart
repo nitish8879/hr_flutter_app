@@ -20,6 +20,7 @@ class AppStorageController extends GetxService {
 
   Future<void> saveUserData(Map<String, dynamic> data) async {
     await userDataBox.write(userDataKey, data);
+    currentUser = UserDataModel.fromJson(data);
   }
 
   Future<void> login(Map<String, dynamic> data) async {

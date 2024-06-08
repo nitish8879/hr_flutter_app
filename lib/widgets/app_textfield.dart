@@ -9,6 +9,7 @@ class AppTextField extends StatefulWidget {
   final EdgeInsetsGeometry? margin;
   final String? Function(String? val)? validator;
   final void Function(String)? onChanged;
+  final bool readOnly;
 
   const AppTextField({
     super.key,
@@ -19,6 +20,7 @@ class AppTextField extends StatefulWidget {
     this.margin,
     this.validator,
     this.onChanged,
+    this.readOnly = false,
   });
 
   @override
@@ -39,6 +41,7 @@ class _AppTextFieldState extends State<AppTextField> {
     return Padding(
       padding: widget.margin ?? EdgeInsets.zero,
       child: TextFormField(
+        readOnly: widget.readOnly,
         validator: widget.validator,
         controller: widget.controller,
         key: widget.key,

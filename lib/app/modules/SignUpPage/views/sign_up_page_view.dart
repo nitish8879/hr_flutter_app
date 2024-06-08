@@ -87,18 +87,7 @@ class SignUpPageView extends GetView<SignUpPageController> {
                 },
               ),
               16.height,
-              // Obx(() {
-              //   return SwitchListTile(
-              //     dense: true,
-              //     value: controller.isEmployeeSignup.value,
-              //     onChanged: (value) => controller.isEmployeeSignup.value = value,
-              //     title: Text(
-              //       controller.isEmployeeSignup.value ? "Employe Signup" : "Admin Signup",
-              //       style: Get.textTheme.bodyLarge,
-              //     ),
-              //     controlAffinity: ListTileControlAffinity.leading,
-              //   );
-              // }),
+            
               Column(
                 children: [
                   title("Organization Details", Icons.people_alt_outlined),

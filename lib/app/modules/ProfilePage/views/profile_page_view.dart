@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:hr_application/data/app_enums.dart';
+import 'package:hr_application/data/controllers/api_conntroller.dart';
+import 'package:hr_application/data/controllers/api_url_service.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
 import 'package:hr_application/utils/app_extension.dart';
 import 'package:hr_application/utils/helper_function.dart';
@@ -26,10 +28,11 @@ class ProfilePageView extends GetView<ProfilePageController> {
           AppTextField(
             hintText: "Username",
             controller: controller.userName,
+            readOnly: true,
           ),
           16.height,
           FilledButton(
-            onPressed: AppStorageController.to.logout,
+            onPressed: showResetPasswordDialog,
             child: Text("Update Password"),
           ),
           16.height,
@@ -43,6 +46,53 @@ class ProfilePageView extends GetView<ProfilePageController> {
           ],
         ],
       ),
+    );
+  }
+
+  void showResetPasswordDialog() {
+    String oldPassWord = "", newPassword = "";
+    Get.defaultDialog(
+      title: "Set New Password",
+      barrierDismissible: false,
+      content: Column(
+        children: [
+          24.height,
+          AppTextField(
+            hintText: "Enter Old password",
+            onChanged: (p) => oldPassWord = p,
+          ),
+          24.height,
+          AppTextField(
+            hintText: "enter new password",
+            onChanged: (p) => newPassword = p,
+          ),
+          24.height,
+        ],
+      ),
+      textCancel: "Cancel",
+      onCancel: closeDialogs,
+      textConfirm: "Update Password",
+      onConfirm: () async {
+        if (oldPassWord.trim().isEmpty || newPassword.trim().isEmpty) {
+          showErrorSnack("Please enter old Password and New Password");
+          return;
+        }
+        final resp = await ApiController.to.callGETAPI(
+          url: APIUrlsService.to.updatePassword(
+            controller.userName.text,
+            oldPassWord,
+            newPassword,
+          ),
+        );
+        if (resp is Map<String, dynamic>) {
+          if (resp['status']) {
+            closeDialogs();
+            showSuccessSnack("Password updated");
+          } else {
+            showSuccessSnack(resp['errorMsg'] ?? resp.toString());
+          }
+        }
+      },
     );
   }
 
@@ -151,7 +201,7 @@ class ProfilePageView extends GetView<ProfilePageController> {
         ),
         16.height,
         FilledButton(
-          onPressed: AppStorageController.to.logout,
+          onPressed: controller.updateCompany,
           child: Text("Update Organization"),
         ),
         50.height,

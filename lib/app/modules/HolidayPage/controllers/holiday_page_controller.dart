@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hr_application/app/modules/HolidayPage/model/holiday_model.dart';
+import 'package:hr_application/data/app_enums.dart';
 import 'package:hr_application/data/controllers/api_conntroller.dart';
 import 'package:hr_application/data/controllers/api_url_service.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
@@ -45,5 +46,13 @@ class HolidayPageController extends GetxController {
       isLloading.value = false;
       showErrorSnack((e).toString());
     });
+  }
+
+  Future<void> addHoliday(DateTime? selectedDate, String? label) async {
+    if (AppStorageController.to.currentUser?.roleType == UserRoleType.superAdmin) {
+      
+    } else {
+      showErrorSnack("Super Admin can only add this");
+    }
   }
 }
