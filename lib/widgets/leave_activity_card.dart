@@ -53,8 +53,7 @@ class LeaveActivityCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   color: item.leaveStatus?.getColor.withOpacity(.1),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 child: Text(
                   item.leaveStatus?.getName ?? "-",
                   style: Get.textTheme.bodyMedium?.copyWith(
@@ -74,38 +73,29 @@ class LeaveActivityCard extends StatelessWidget {
             children: [
               _buidlTitleAndSubTitle(
                 "Apply Days",
-                '${item.todate?.difference(item.fromdate!).inDays.toString() ?? "0"} Days',
+                '${(item.todate?.add(Duration(days: 1)))?.difference(item.fromdate!).inDays.toString() ?? "0"} Days',
               ),
-              _buidlTitleAndSubTitle(
-                  "Approval", item.approvalTo?.fullName ?? "-"),
+              _buidlTitleAndSubTitle("Approval", item.approvalTo?.fullName ?? "-"),
             ],
           ),
-          if (((AppStorageController.to.currentUser?.roleType ==
-                          UserRoleType.superAdmin ||
-                      AppStorageController.to.currentUser?.roleType ==
-                          UserRoleType.admin ||
-                      AppStorageController.to.currentUser?.roleType ==
-                          UserRoleType.manager) &&
-                  AppStorageController.to.currentUser?.userID ==
-                      item.approvalTo?.id) &&
+          if (((AppStorageController.to.currentUser?.roleType == UserRoleType.superAdmin ||
+                      AppStorageController.to.currentUser?.roleType == UserRoleType.admin ||
+                      AppStorageController.to.currentUser?.roleType == UserRoleType.manager) &&
+                  AppStorageController.to.currentUser?.userID == item.approvalTo?.id) &&
               item.leaveStatus == LeaveActivityState.pending) ...[
             8.height,
             Row(
               children: [
                 Expanded(
                   child: FilledButton(
-                    onPressed: () => approveRejectTap != null
-                        ? approveRejectTap!(LeaveActivityState.approved)
-                        : null,
+                    onPressed: () => approveRejectTap != null ? approveRejectTap!(LeaveActivityState.approved) : null,
                     child: const Text("Approve"),
                   ),
                 ),
                 24.width,
                 Expanded(
                   child: FilledButton(
-                    onPressed: () => approveRejectTap != null
-                        ? approveRejectTap!(LeaveActivityState.rejected)
-                        : null,
+                    onPressed: () => approveRejectTap != null ? approveRejectTap!(LeaveActivityState.rejected) : null,
                     child: const Text("Reject"),
                   ),
                 ),
