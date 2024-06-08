@@ -197,14 +197,7 @@ class HomePageView extends GetView<HomePageController> {
               ],
             ),
           ),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Obx(() {
-                return UserActivityView(
-                  userActivityModel: controller.userActivityModel.value,
-                );
-              })),
-          28.height,
+          20.height,
           //? Swipe Button
           Obx(() {
             return controller.attendenceModel.value?.outTime == null &&
@@ -233,10 +226,12 @@ class HomePageView extends GetView<HomePageController> {
                     ),
                   )
                 : const SizedBox();
-          }),   
-          28.height,
+          }),
+          20.height,
           Obx(() {
-            return controller.attendenceModel.value?.inTime != null && controller.attendenceModel.value?.outTime == null && controller.userPerformActivty.value != UserPerformActivty.BREAKOUT
+            return controller.attendenceModel.value?.inTime != null &&
+                    controller.attendenceModel.value?.outTime == null &&
+                    controller.userPerformActivty.value != UserPerformActivty.BREAKOUT
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: SwipeButton.expand(
@@ -258,6 +253,17 @@ class HomePageView extends GetView<HomePageController> {
                   )
                 : const SizedBox();
           }),
+
+          20.height,
+
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Obx(() {
+                return UserActivityView(
+                  userActivityModel: controller.userActivityModel.value,
+                );
+              })),
+          28.height,
           60.height,
         ],
       ),
