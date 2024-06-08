@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hr_application/app/modules/HomePage/model/user_activity_model.dart';
 import 'package:hr_application/app/modules/HomePage/views/user_activity_view.dart';
+import 'package:hr_application/app/routes/app_pages.dart';
+import 'package:hr_application/data/app_enums.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
 import 'package:hr_application/utils/app_extension.dart';
 import 'package:hr_application/utils/theme/app_colors.dart';
@@ -69,6 +71,18 @@ class HomePageView extends GetView<HomePageController> {
               children: [
                 Text("Today Attendence", style: Get.textTheme.headlineSmall),
                 16.width,
+                if (AppStorageController.to.currentUser?.roleType == UserRoleType.admin ||
+                    AppStorageController.to.currentUser?.roleType == UserRoleType.manager ||
+                    AppStorageController.to.currentUser?.roleType == UserRoleType.superAdmin) ...[
+                  Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      Get.toNamed(Routes.HOME_ANALYTICS);
+                    },
+                    icon: Icon(Icons.analytics_outlined),
+                  ),
+                  20.width,
+                ],
                 Obx(
                   () {
                     return controller.attendenceLoading.value

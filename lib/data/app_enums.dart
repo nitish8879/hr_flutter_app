@@ -45,3 +45,41 @@ enum UserRoleType {
     };
   }
 }
+
+enum LeaveType {
+  WFH,
+  ONEDAY,
+  MANYDAYS;
+
+  String get readableName {
+    return switch (this) {
+      (WFH) => "Work From Home",
+      (ONEDAY) => "One Day",
+      (MANYDAYS) => "Many Days",
+    };
+  }
+
+  String get code {
+    return switch (this) {
+      (WFH) => "WFH",
+      (ONEDAY) => "ONEDAY",
+      (MANYDAYS) => "MANYDAYS",
+    };
+  }
+
+  static List<String> get list {
+    return [
+      "Work From Home",
+      "One Day",
+      "Many Days",
+    ];
+  }
+
+  static LeaveType fromString(String val) {
+    return switch (val) {
+      "Work From Home" => LeaveType.WFH,
+      "One Day" => LeaveType.ONEDAY,
+      _ => LeaveType.MANYDAYS,
+    };
+  }
+}

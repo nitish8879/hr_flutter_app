@@ -29,6 +29,8 @@ class APIUrlsService extends GetxService {
 
   //////////////?? HOLIDAY   ??/////////////
   String allHolidayByCompanyID(String compnayID) => "company/getHoliday?companyId=$compnayID";
+  String get createHoliday => "company/create";
+  String get deleteHoliday => "company/deleteHoliday";
 
   ///////////?? COMPANY    ??///////////
   String get updateCompany => "company/updateCompany";

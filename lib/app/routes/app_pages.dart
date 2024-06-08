@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import 'package:hr_application/app/modules/ApplyLeavePage/bindings/apply_leave_page_binding.dart';
 import 'package:hr_application/app/modules/ApplyLeavePage/views/apply_leave_page_view.dart';
+import 'package:hr_application/app/modules/HomeAnalytics/bindings/home_analytics_binding.dart';
+import 'package:hr_application/app/modules/HomeAnalytics/views/home_analytics_view.dart';
 
 import '../modules/AllEmployesPage/bindings/all_employes_page_binding.dart';
 import '../modules/AllEmployesPage/views/all_employes_page_view.dart';
@@ -79,6 +81,11 @@ class AppPages {
       name: _Paths.APPLY_LEAVE_PAGE,
       page: () => ApplyLeavePageView(),
       binding: ApplyLeavePageBinding(),
+    ),
+    GetPage(
+      name: _Paths.HOME_ANALYTICS,
+      page: () => HomeAnalyticsView(),
+      binding: HomeAnalyticsBinding(),
     ),
   ];
 }

@@ -1,5 +1,5 @@
 class HolidayModel {
-  int? id;
+  String? id;
   String? holidayDate;
   String? label;
 

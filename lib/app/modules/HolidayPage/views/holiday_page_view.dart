@@ -102,41 +102,55 @@ class HolidayPageView extends GetView<HolidayPageController> {
       margin: const EdgeInsets.all(16),
       decoration: kBoxDecoration,
       padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.calendar_month_outlined,
-                color: AppColors.kBlack900,
-                size: 28,
-              ),
-              16.width,
-              if (controller.allHolidays[index].holidayDate != null) ...{
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.calendar_month_outlined,
+                          color: AppColors.kBlack900,
+                          size: 28,
+                        ),
+                        16.width,
+                        if (controller.allHolidays[index].holidayDate != null) ...{
+                          Text(
+                            DateFormat("yyyy-MM-ddTHH:mm:ss").parse(controller.allHolidays[index].holidayDate!).toMMDDYYYY,
+                            style: Get.textTheme.headlineSmall?.copyWith(
+                              fontSize: 18,
+                            ),
+                          ),
+                        },
+                      ],
+                    ),
+                    if (controller.allHolidays[index].holidayDate != null) ...{
+                      Text(
+                        DateFormat("yyyy-MM-ddTHH:mm:ss").parse(controller.allHolidays[index].holidayDate!).toWEEKDAY,
+                        style: Get.textTheme.labelLarge,
+                      ),
+                    },
+                  ],
+                ),
+                16.height,
                 Text(
-                  DateFormat("yyyy-MM-ddTHH:mm:ss").parse(controller.allHolidays[index].holidayDate!).toMMDDYYYY,
-                  style: Get.textTheme.headlineSmall?.copyWith(
-                    fontSize: 18,
-                  ),
+                  controller.allHolidays[index].label ?? "-",
+                  style: Get.textTheme.headlineSmall?.copyWith(),
                 ),
-              },
-              if (controller.allHolidays[index].holidayDate != null) ...{
-                const Spacer(),
-                Text(
-                  DateFormat("yyyy-MM-ddTHH:mm:ss").parse(controller.allHolidays[index].holidayDate!).toWEEKDAY,
-                  style: Get.textTheme.labelLarge,
-                ),
-              },
-            ],
+              ],
+            ),
           ),
-          16.height,
-          Text(
-            controller.allHolidays[index].label ?? "-",
-            style: Get.textTheme.headlineSmall?.copyWith(
-                // fontSize: 18,
-                ),
-          ),
+          if (AppStorageController.to.currentUser?.roleType == UserRoleType.superAdmin) ...[
+            IconButton(
+              onPressed: () => controller.deleteHoliday(controller.allHolidays[index]),
+              icon: const Icon(Icons.delete),
+            )
+          ],
         ],
       ),
     );

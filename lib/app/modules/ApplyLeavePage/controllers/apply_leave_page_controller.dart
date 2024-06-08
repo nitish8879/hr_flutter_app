@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hr_application/app/models/team_members_model.dart';
-import 'package:hr_application/app/models/teams_model.dart';
 import 'package:hr_application/app/routes/app_pages.dart';
+import 'package:hr_application/data/app_enums.dart';
 import 'package:hr_application/data/controllers/api_conntroller.dart';
 import 'package:hr_application/data/controllers/api_url_service.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
@@ -14,7 +14,9 @@ class ApplyLeavePageController extends GetxController {
   var leaveStartDate = Rxn<DateTime?>(), leaveEndDate = Rxn<DateTime?>();
   var adminMembers = <MembersData>[];
   MembersData? selectedTeam;
+  LeaveType? selectedLeaveType;
   var isTeamLoading = true.obs;
+  bool canShowToDate = true;
   @override
   void onInit() {
     super.onInit();
@@ -35,8 +37,8 @@ class ApplyLeavePageController extends GetxController {
   }
 
   void appllyLeave() {
-    if (selectedTeam == null || leavereasonTC.text.trim().isEmpty) {
-      showErrorSnack("Select Approval Person and enter leave reason");
+    if (selectedTeam == null || leavereasonTC.text.trim().isEmpty || selectedLeaveType == null) {
+      showErrorSnack("Select Approval Person and enter leave reason and select Leave Type");
       return;
     }
     ApiController.to.callPOSTAPI(
@@ -49,6 +51,7 @@ class ApplyLeavePageController extends GetxController {
         "fromdate": leaveStartDate.value?.toDDMMYYYY,
         "todate": leaveEndDate.value?.toDDMMYYYY,
         "leaveReason": leavereasonTC.text,
+        "leaveType": selectedLeaveType?.code,
       },
     ).then((resp) {
       if (resp != null && resp is Map<String, dynamic> && resp['status']) {
