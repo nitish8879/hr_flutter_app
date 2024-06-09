@@ -13,6 +13,7 @@ class APIUrlsService extends GetxService {
 
   //////////////////?? Home Page API     ??////////////////
   final String dailyInOut = "activity/dailyInOut";
+  String homeAnalyticsData(String userID, String companyID) => "auth/homeAnalyticsData?userID=$userID&companyID=$companyID";
 
   String getDataByIDAndCompanyIdAndDate(
     String id,

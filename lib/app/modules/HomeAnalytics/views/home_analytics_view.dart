@@ -7,6 +7,7 @@ import '../controllers/home_analytics_controller.dart';
 class HomeAnalyticsView extends GetView<HomeAnalyticsController> {
   @override
   Widget build(BuildContext context) {
+    controller.fetchHomeAnalyticsData();
     return Scaffold(
       appBar: AppBar(
         title: Text('HomeAnalyticsView'),
