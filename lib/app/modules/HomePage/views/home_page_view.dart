@@ -71,9 +71,12 @@ class HomePageView extends GetView<HomePageController> {
               children: [
                 Text("Today Attendence", style: Get.textTheme.headlineSmall),
                 16.width,
-                if (AppStorageController.to.currentUser?.roleType == UserRoleType.admin ||
-                    AppStorageController.to.currentUser?.roleType == UserRoleType.manager ||
-                    AppStorageController.to.currentUser?.roleType == UserRoleType.superAdmin) ...[
+                if (AppStorageController.to.currentUser?.roleType ==
+                        UserRoleType.admin ||
+                    AppStorageController.to.currentUser?.roleType ==
+                        UserRoleType.manager ||
+                    AppStorageController.to.currentUser?.roleType ==
+                        UserRoleType.superAdmin) ...[
                   Spacer(),
                   IconButton(
                     onPressed: () {
@@ -114,7 +117,9 @@ class HomePageView extends GetView<HomePageController> {
                       "Check In",
                       controller.attendenceModel.value?.inTime == null
                           ? "-"
-                          : DateFormat("hh:mm:ss").parse(controller.attendenceModel.value!.inTime!).tohhMMh,
+                          : DateFormat("hh:mm:ss")
+                              .parse(controller.attendenceModel.value!.inTime!)
+                              .tohhMMh,
                       controller.userActivityModel.value?.checkIn?.msg ?? '',
                     );
                   }),
@@ -128,7 +133,10 @@ class HomePageView extends GetView<HomePageController> {
                         "Check Out",
                         controller.attendenceModel.value?.outTime == null
                             ? "-"
-                            : DateFormat("hh:mm:ss").parse(controller.attendenceModel.value!.outTime!).tohhMMh,
+                            : DateFormat("hh:mm:ss")
+                                .parse(
+                                    controller.attendenceModel.value!.outTime!)
+                                .tohhMMh,
                         controller.userActivityModel.value?.outTime?.msg ?? '',
                       );
                     },
@@ -152,7 +160,9 @@ class HomePageView extends GetView<HomePageController> {
                         Icons.free_breakfast_outlined,
                         "Break Time",
                         controller.calculateTimeDifference(
-                                controller.attendenceModel.value?.breakInTime, controller.attendenceModel.value?.breakOutTime) ??
+                                controller.attendenceModel.value?.breakInTime,
+                                controller
+                                    .attendenceModel.value?.breakOutTime) ??
                             '-',
                         "",
                       );
@@ -171,52 +181,42 @@ class HomePageView extends GetView<HomePageController> {
               ],
             ),
           ),
+          //? Total Working 
+          Obx(
+            () {
+              if (controller.workingTime.isEmpty) {
+                return SizedBox();
+              }
+              return Padding(
+                padding: EdgeInsets.all(16),
+                child: _buildCheckInOutCard(
+                  Icons.work_history_outlined,
+                  "Total Working Hours",
+                  DateFormat("hh:mm:ss")
+                      .parse(controller.attendenceModel.value!.outTime!)
+                      .difference(DateFormat("hh:mm:ss")
+                          .parse(controller.attendenceModel.value!.inTime!))
+                      .toString()
+                      .split(".")[0],
+                  '-',
+                ),
+              );
+            },
+          ),
           20.height,
           //? Your Activity View All
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Text("Your Activity", style: Get.textTheme.headlineSmall),
-                    16.width,
-                    Obx(
-                      () {
-                        return controller.activityLoading.value
-                            ? const SizedBox(
-                                width: 10,
-                                height: 10,
-                                child: CircularProgressIndicator(
-                                  color: AppColors.kFoundationPurple700,
-                                  strokeWidth: 1.5,
-                                ),
-                              )
-                            : const SizedBox();
-                      },
-                    ),
-                  ],
-                ),
-                TextButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
-                  child: Text(
-                    "View All",
-                    style: Get.textTheme.bodyLarge?.copyWith(
-                      color: AppColors.kFoundationPurple700,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            child: Text("Your Activity", style: Get.textTheme.headlineSmall),
           ),
           20.height,
           //? Swipe Button
           Obx(() {
             return controller.attendenceModel.value?.outTime == null &&
-                    (controller.selectedDate.value.year == controller.now.year &&
-                        controller.selectedDate.value.month == controller.now.month &&
+                    (controller.selectedDate.value.year ==
+                            controller.now.year &&
+                        controller.selectedDate.value.month ==
+                            controller.now.month &&
                         controller.selectedDate.value.day == controller.now.day)
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -245,7 +245,8 @@ class HomePageView extends GetView<HomePageController> {
           Obx(() {
             return controller.attendenceModel.value?.inTime != null &&
                     controller.attendenceModel.value?.outTime == null &&
-                    controller.userPerformActivty.value != UserPerformActivty.BREAKOUT
+                    controller.userPerformActivty.value !=
+                        UserPerformActivty.BREAKOUT
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: SwipeButton.expand(

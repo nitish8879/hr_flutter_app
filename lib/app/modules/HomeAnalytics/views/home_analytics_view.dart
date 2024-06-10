@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:hr_application/data/controllers/app_storage_service.dart';
 
 import '../controllers/home_analytics_controller.dart';
 
@@ -10,14 +11,11 @@ class HomeAnalyticsView extends GetView<HomeAnalyticsController> {
     controller.fetchHomeAnalyticsData();
     return Scaffold(
       appBar: AppBar(
-        title: Text('HomeAnalyticsView'),
+        title: Text('${AppStorageController.to.currentUser?.companyName} Info'),
         centerTitle: true,
       ),
-      body: Center(
-        child: Text(
-          'HomeAnalyticsView is working',
-          style: TextStyle(fontSize: 20),
-        ),
+      body: ListView(
+        children: [Text("data")],
       ),
     );
   }

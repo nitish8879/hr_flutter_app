@@ -12,7 +12,7 @@ class HomeAnalyticsController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    // fetchHomeAnalyticsData();
+    fetchHomeAnalyticsData();
   }
 
   Future<void> fetchHomeAnalyticsData() async {

@@ -15,6 +15,7 @@ class HomePageController extends GetxController {
   var userActivityModel = Rxn<UserActivityModel?>(null);
   var userPerformActivty = UserPerformActivty.IN.obs;
   var now = DateTime.now();
+  var workingTime = "".obs;
   @override
   void onInit() {
     super.onInit();
@@ -48,13 +49,23 @@ class HomePageController extends GetxController {
       attendenceLoading.value = false;
     }).then((resp) {
       attendenceLoading.value = false;
-      if (resp != null && resp is Map<String, dynamic> && (resp['status'] as bool)) {
+      if (resp != null &&
+          resp is Map<String, dynamic> &&
+          (resp['status'] as bool)) {
         attendenceModel.value = AttendenceModel.fromJson(resp['data']);
       } else {
         attendenceModel.value = null;
       }
       print("getTodatyAttendenceData$resp");
     });
+  }
+
+  String get calculateTotalWorkingHours {
+    return DateFormat("hh:mm:ss")
+        .parse(attendenceModel.value!.outTime!)
+        .difference(
+            DateFormat("hh:mm:ss").parse(attendenceModel.value!.inTime!))
+        .toString();
   }
 
   void getActivityData() {
@@ -71,14 +82,18 @@ class HomePageController extends GetxController {
       activityLoading.value = false;
     }).then((resp) {
       activityLoading.value = false;
-      if (resp != null && resp is Map<String, dynamic> && resp['data'] != null) {
+      if (resp != null &&
+          resp is Map<String, dynamic> &&
+          resp['data'] != null) {
         userActivityModel.value = UserActivityModel.fromJson(resp['data']);
         if (userActivityModel.value?.checkIn == null) {
           userPerformActivty.value = UserPerformActivty.IN;
-        } else if (userActivityModel.value?.breakInTime == null || (userActivityModel.value?.breakInTime?.isEmpty ?? true)) {
+        } else if (userActivityModel.value?.breakInTime == null ||
+            (userActivityModel.value?.breakInTime?.isEmpty ?? true)) {
           userPerformActivty.value = UserPerformActivty.BREAKIN;
         } else if (userActivityModel.value?.breakOutTime == null ||
-            ((userActivityModel.value?.breakInTime?.length ?? 0) > ((userActivityModel.value?.breakOutTime?.length ?? 0)))) {
+            ((userActivityModel.value?.breakInTime?.length ?? 0) >
+                ((userActivityModel.value?.breakOutTime?.length ?? 0)))) {
           userPerformActivty.value = UserPerformActivty.BREAKOUT;
         } else if (userActivityModel.value?.outTime == null) {
           userPerformActivty.value = UserPerformActivty.BREAKIN;
@@ -101,9 +116,11 @@ class HomePageController extends GetxController {
     if (userPerformActivty.value == UserPerformActivty.IN) {
       payload.putIfAbsent("inTime", () => DateTime.now().toHOUR24MINUTESECOND);
     } else if (userPerformActivty.value == UserPerformActivty.BREAKIN) {
-      payload.putIfAbsent("breakInTime", () => DateTime.now().toHOUR24MINUTESECOND);
+      payload.putIfAbsent(
+          "breakInTime", () => DateTime.now().toHOUR24MINUTESECOND);
     } else if (userPerformActivty.value == UserPerformActivty.BREAKOUT) {
-      payload.putIfAbsent("breakOutTime", () => DateTime.now().toHOUR24MINUTESECOND);
+      payload.putIfAbsent(
+          "breakOutTime", () => DateTime.now().toHOUR24MINUTESECOND);
     } else if (userPerformActivty.value == UserPerformActivty.OUT) {
       payload.putIfAbsent("outTime", () => DateTime.now().toHOUR24MINUTESECOND);
     }
@@ -125,7 +142,8 @@ class HomePageController extends GetxController {
     });
   }
 
-  Duration calculateTotalBreakTime(List<String> inTimes, List<String> outTimes) {
+  Duration calculateTotalBreakTime(
+      List<String> inTimes, List<String> outTimes) {
     Duration totalBreakTime = Duration.zero;
     DateFormat format = DateFormat("HH:mm:ss");
 
@@ -138,7 +156,8 @@ class HomePageController extends GetxController {
     return totalBreakTime;
   }
 
-  String? calculateTimeDifference(List<String>? inTimes, List<String>? outTimes) {
+  String? calculateTimeDifference(
+      List<String>? inTimes, List<String>? outTimes) {
     if ((inTimes?.isEmpty ?? true) || (outTimes?.isEmpty ?? true)) {
       return null;
     }
@@ -179,7 +198,8 @@ class HomePageController extends GetxController {
 
     for (int day = 1; day <= totalDaysInMonth; day++) {
       var currentDate = DateTime(currentYear, currentMonth, day).toWEEKDAY;
-      if (AppStorageController.to.currentUser!.wrokingDays!.contains(currentDate.toUpperCase())) {
+      if (AppStorageController.to.currentUser!.wrokingDays!
+          .contains(currentDate.toUpperCase())) {
         count++;
       }
     }
