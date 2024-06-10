@@ -181,7 +181,7 @@ class HomePageView extends GetView<HomePageController> {
               ],
             ),
           ),
-          //? Total Working 
+          //? Total Working Time
           Obx(
             () {
               if (controller.workingTime.isEmpty) {
@@ -192,12 +192,7 @@ class HomePageView extends GetView<HomePageController> {
                 child: _buildCheckInOutCard(
                   Icons.work_history_outlined,
                   "Total Working Hours",
-                  DateFormat("hh:mm:ss")
-                      .parse(controller.attendenceModel.value!.outTime!)
-                      .difference(DateFormat("hh:mm:ss")
-                          .parse(controller.attendenceModel.value!.inTime!))
-                      .toString()
-                      .split(".")[0],
+                  controller.workingTime.value,
                   '-',
                 ),
               );

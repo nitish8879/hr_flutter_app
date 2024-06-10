@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:hr_application/app/modules/HomePage/model/attendence_model.dart';
 import 'package:hr_application/app/modules/HomePage/model/user_activity_model.dart';
@@ -16,6 +18,7 @@ class HomePageController extends GetxController {
   var userPerformActivty = UserPerformActivty.IN.obs;
   var now = DateTime.now();
   var workingTime = "".obs;
+  Timer? _timer;
   @override
   void onInit() {
     super.onInit();
@@ -26,6 +29,39 @@ class HomePageController extends GetxController {
     super.onReady();
     getTodatyAttendenceData();
     getActivityData();
+  }
+
+  void startTimer() {
+    _timer?.cancel();
+    if (attendenceModel.value?.inTime == null) {
+      print("a");
+      return;
+    } else if (attendenceModel.value?.inTime != null &&
+        attendenceModel.value?.outTime != null) {
+      print("b");
+      workingTime.value = DateFormat("hh:mm:ss")
+          .parse(attendenceModel.value!.outTime!)
+          .difference(
+              DateFormat("hh:mm:ss").parse(attendenceModel.value!.inTime!))
+          .toString()
+          .split(".")[0];
+    } else {
+      print("c");
+      var inTime = DateFormat("hh:mm:ss").parse(attendenceModel.value!.inTime!);
+      // _timer = Timer.periodic(
+      //   const Duration(seconds: 1),
+      //   (timer) {
+      //     inTime = inTime.add(const Duration(seconds: 1));
+      //     workingTime.value = DateFormat("hh:mm:ss").format(inTime);
+      //     print("c ${workingTime.value} ${inTime.toString()} ${timer.tick}");
+      //   },
+      // );
+    }
+  }
+
+  void stopTimer() {
+    _timer?.cancel();
+    _timer = null;
   }
 
   void onDateChnged(DateTime newDate) {
@@ -53,9 +89,11 @@ class HomePageController extends GetxController {
           resp is Map<String, dynamic> &&
           (resp['status'] as bool)) {
         attendenceModel.value = AttendenceModel.fromJson(resp['data']);
+        startTimer();
       } else {
         attendenceModel.value = null;
       }
+
       print("getTodatyAttendenceData$resp");
     });
   }
@@ -186,6 +224,7 @@ class HomePageController extends GetxController {
 
   @override
   void onClose() {
+    stopTimer();
     super.onClose();
   }
 
