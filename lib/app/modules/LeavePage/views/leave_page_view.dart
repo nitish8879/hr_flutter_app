@@ -25,8 +25,7 @@ class LeavePageView extends GetView<LeavePageController> {
           ),
           14.width,
           //? ADD Button
-          if (AppStorageController.to.currentUser?.roleType !=
-              UserRoleType.superAdmin) ...[
+          if (AppStorageController.to.currentUser?.roleType != UserRoleType.superAdmin) ...[
             Row(
               children: [
                 IconButton.outlined(
@@ -38,10 +37,8 @@ class LeavePageView extends GetView<LeavePageController> {
             ),
           ],
 
-          if (AppStorageController.to.currentUser?.roleType ==
-                  UserRoleType.admin ||
-              AppStorageController.to.currentUser?.roleType ==
-                  UserRoleType.manager) ...[
+          if (AppStorageController.to.currentUser?.roleType == UserRoleType.admin ||
+              AppStorageController.to.currentUser?.roleType == UserRoleType.manager) ...[
             Obx(
               () {
                 return Row(
@@ -71,16 +68,26 @@ class LeavePageView extends GetView<LeavePageController> {
                         children: [
                           Expanded(
                             child: _buildOverViewLeave(
-                              "Balance",
-                              controller.totalCount['totalLeavebalance'] ?? 0,
+                              "Leave",
+                              controller.totalCount['paidLeaveBalance'] ?? 0,
                               AppColors.kBlue900,
+                              prefixLabel: "Paid",
+                            ),
+                          ),
+                          16.width,
+                          Expanded(
+                            child: _buildOverViewLeave(
+                              "Leave",
+                              controller.totalCount['casualAndSickLeaveBalance'] ?? 0,
+                              AppColors.kBlue900,
+                              prefixLabel: "Casual/Sick",
                             ),
                           ),
                           16.width,
                           Expanded(
                             child: _buildOverViewLeave(
                               "Balance",
-                              controller.totalCount['totalLeavebalance'] ?? 0,
+                              controller.totalCount['totalWFHbalance'] ?? 0,
                               AppColors.kOrange500,
                               prefixLabel: "WFH",
                             ),
@@ -101,8 +108,7 @@ class LeavePageView extends GetView<LeavePageController> {
     );
   }
 
-  _buildOverViewLeave(String label, int count, Color color,
-      {String? prefixLabel}) {
+  _buildOverViewLeave(String label, int count, Color color, {String? prefixLabel}) {
     return Container(
       decoration: BoxDecoration(
         color: color.withOpacity(.1),
@@ -143,8 +149,7 @@ class LeavePageView extends GetView<LeavePageController> {
               itemBuilder: (context, index) {
                 return LeaveActivityCard(
                   item: controller.leaveActivities[index],
-                  approveRejectTap: (status) =>
-                      controller.handleApproveRejectTap(
+                  approveRejectTap: (status) => controller.handleApproveRejectTap(
                     status,
                     controller.leaveActivities[index],
                   ),
@@ -162,24 +167,17 @@ class LeavePageView extends GetView<LeavePageController> {
         return Row(
           children: LeaveActivityState.list.map(
             (e) {
-              bool isSelected = controller.tabSelected.value ==
-                  LeaveActivityState.fromStrings(e);
+              bool isSelected = controller.tabSelected.value == LeaveActivityState.fromStrings(e);
 
-              final count = controller.mainList
-                  .where((element) =>
-                      element.leaveStatus == LeaveActivityState.fromStrings(e))
-                  .length;
+              final count = controller.mainList.where((element) => element.leaveStatus == LeaveActivityState.fromStrings(e)).length;
               return Expanded(
                 child: InkWell(
-                  onTap: () => controller
-                      .onTabChange(LeaveActivityState.fromStrings(e)!),
+                  onTap: () => controller.onTabChange(LeaveActivityState.fromStrings(e)!),
                   borderRadius: BorderRadius.circular(16),
                   child: Ink(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: isSelected
-                          ? AppColors.kFoundationPurple700
-                          : Colors.transparent,
+                      color: isSelected ? AppColors.kFoundationPurple700 : Colors.transparent,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Align(
@@ -187,8 +185,7 @@ class LeavePageView extends GetView<LeavePageController> {
                       child: Text(
                         "$e ${count == 0 ? '' : count}",
                         style: Get.textTheme.bodyLarge?.copyWith(
-                          color:
-                              isSelected ? AppColors.kWhite : AppColors.black,
+                          color: isSelected ? AppColors.kWhite : AppColors.black,
                         ),
                       ),
                     ),

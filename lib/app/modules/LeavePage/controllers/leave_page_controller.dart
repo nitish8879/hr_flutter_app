@@ -35,8 +35,7 @@ class LeavePageController extends GetxController {
   void onTabChange(LeaveActivityState newState) {
     // if (newState == tabSelected.value) return;
     leaveActivities.clear();
-    leaveActivities
-        .addAll(mainList.where((element) => element.leaveStatus == newState));
+    leaveActivities.addAll(mainList.where((element) => element.leaveStatus == newState));
     print(leaveActivities.length);
     tabSelected.value = newState;
   }
@@ -113,19 +112,16 @@ class LeavePageController extends GetxController {
         if (resp['data'] is List<dynamic>) {
           totalCount.value = {};
           mainList.addAll(
-            (resp['data'] as List<dynamic>)
-                .map((e) => LeaveActivityModel.fromJson(e))
-                .toList(),
+            (resp['data'] as List<dynamic>).map((e) => LeaveActivityModel.fromJson(e)).toList(),
           );
         } else {
           totalCount.value = {
-            "totalLeavebalance": resp['totalLeavebalance'],
-            "totalWFHbalance": resp['totalWFHbalance'],
+            "paidLeaveBalance": resp['data']['paidLeaveBalance'],
+            "totalWFHbalance": resp['data']['totalWFHbalance'],
+            "casualAndSickLeaveBalance": resp['data']['casualAndSickLeaveBalance'],
           };
           mainList.addAll(
-            (resp['data']['data'] as List<dynamic>)
-                .map((e) => LeaveActivityModel.fromJson(e))
-                .toList(),
+            (resp['data']['data'] as List<dynamic>).map((e) => LeaveActivityModel.fromJson(e)).toList(),
           );
         }
         onTabChange(LeaveActivityState.pending);

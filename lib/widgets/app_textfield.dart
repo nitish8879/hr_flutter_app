@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hr_application/utils/theme/app_colors.dart';
 
 class AppTextField extends StatefulWidget {
@@ -10,6 +11,7 @@ class AppTextField extends StatefulWidget {
   final String? Function(String? val)? validator;
   final void Function(String)? onChanged;
   final bool readOnly;
+  final List<TextInputFormatter>? inputFormatters;
 
   const AppTextField({
     super.key,
@@ -21,6 +23,7 @@ class AppTextField extends StatefulWidget {
     this.validator,
     this.onChanged,
     this.readOnly = false,
+    this.inputFormatters,
   });
 
   @override
@@ -41,6 +44,7 @@ class _AppTextFieldState extends State<AppTextField> {
     return Padding(
       padding: widget.margin ?? EdgeInsets.zero,
       child: TextFormField(
+        inputFormatters: widget.inputFormatters,
         readOnly: widget.readOnly,
         validator: widget.validator,
         controller: widget.controller,

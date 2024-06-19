@@ -21,6 +21,15 @@ class SignUpPageController extends GetxController {
       fullNameTC = TextEditingController(
         text: kDebugMode ? "Nitish Gupta" : null,
       ),
+      paidLeaveTC = TextEditingController(
+        text: kDebugMode ? "2" : null,
+      ),
+      casualSickTC = TextEditingController(
+        text: kDebugMode ? "2" : null,
+      ),
+      wfhTC = TextEditingController(
+        text: kDebugMode ? "2" : null,
+      ),
       organizationTC = TextEditingController(
         text: kDebugMode ? "Tijoree" : null,
       );
@@ -86,6 +95,9 @@ class SignUpPageController extends GetxController {
         "inTime": formatTimeOfDay(startTime.value!),
         "outTime": formatTimeOfDay(endTime.value!),
         "wrokingDays": tempWorkingdays.map((e) => e.code).toList(),
+        "perMonthPL": num.tryParse(paidLeaveTC.text.trim()),
+        "perMonthSLCL": num.tryParse(casualSickTC.text.trim()),
+        "perMonthWFH": num.tryParse(paidLeaveTC.text.trim()),
       };
       ApiController.to
           .callPOSTAPI(
