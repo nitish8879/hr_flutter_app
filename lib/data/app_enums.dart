@@ -77,8 +77,8 @@ enum LeaveType {
 
   static LeaveType fromString(String val) {
     return switch (val) {
-      "Work From Home" => LeaveType.wfh,
-      "Paid Leave" => LeaveType.paidLeave,
+      ("Work From Home"||"WFH") => LeaveType.wfh,
+      ("Paid Leave"||'PAID_LEAVE') => LeaveType.paidLeave,
       _ => LeaveType.casualAndSickLeave,
     };
   }

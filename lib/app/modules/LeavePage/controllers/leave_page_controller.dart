@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hr_application/app/models/teams_model.dart';
 import 'package:hr_application/app/modules/LeavePage/model/leave_activity_model.dart';
-import 'package:hr_application/app/routes/app_pages.dart';
 import 'package:hr_application/data/controllers/api_conntroller.dart';
 import 'package:hr_application/data/controllers/api_url_service.dart';
 import 'package:hr_application/data/controllers/app_storage_service.dart';
@@ -35,7 +34,8 @@ class LeavePageController extends GetxController {
   void onTabChange(LeaveActivityState newState) {
     // if (newState == tabSelected.value) return;
     leaveActivities.clear();
-    leaveActivities.addAll(mainList.where((element) => element.leaveStatus == newState));
+    leaveActivities
+        .addAll(mainList.where((element) => element.leaveStatus == newState));
     print(leaveActivities.length);
     tabSelected.value = newState;
   }
@@ -70,31 +70,6 @@ class LeavePageController extends GetxController {
     }
   }
 
-  void appllyLeave() {
-    ApiController.to.callPOSTAPI(
-      url: APIUrlsService.to.addLeave,
-      body: {
-        "userID": AppStorageController.to.currentUser?.userID,
-        "companyID": AppStorageController.to.currentUser?.companyID,
-        "approvalTo": AppStorageController.to.currentUser?.adminID,
-        "leaveStatus": "PENDING",
-        "fromdate": leaveStartDate.value?.toDDMMYYYY,
-        "todate": leaveEndDate.value?.toDDMMYYYY,
-        "leaveReason": leavereasonTC.text,
-      },
-    ).then((resp) {
-      if (resp != null && resp is Map<String, dynamic> && resp['status']) {
-        leavereasonTC.clear();
-        leaveStartDate.value = null;
-        leaveEndDate.value = null;
-        Get.back();
-        getAllLeaves();
-      } else {
-        showErrorSnack((resp['errorMsg'] ?? resp).toString());
-      }
-    });
-  }
-
   void getAllLeaves() {
     ApiController.to
         .callGETAPI(
@@ -112,16 +87,21 @@ class LeavePageController extends GetxController {
         if (resp['data'] is List<dynamic>) {
           totalCount.value = {};
           mainList.addAll(
-            (resp['data'] as List<dynamic>).map((e) => LeaveActivityModel.fromJson(e)).toList(),
+            (resp['data'] as List<dynamic>)
+                .map((e) => LeaveActivityModel.fromJson(e))
+                .toList(),
           );
         } else {
           totalCount.value = {
             "paidLeaveBalance": resp['data']['paidLeaveBalance'],
             "totalWFHbalance": resp['data']['totalWFHbalance'],
-            "casualAndSickLeaveBalance": resp['data']['casualAndSickLeaveBalance'],
+            "casualAndSickLeaveBalance": resp['data']
+                ['casualAndSickLeaveBalance'],
           };
           mainList.addAll(
-            (resp['data']['data'] as List<dynamic>).map((e) => LeaveActivityModel.fromJson(e)).toList(),
+            (resp['data']['data'] as List<dynamic>)
+                .map((e) => LeaveActivityModel.fromJson(e))
+                .toList(),
           );
         }
         onTabChange(LeaveActivityState.pending);
@@ -130,6 +110,7 @@ class LeavePageController extends GetxController {
       }
     }).catchError(
       (e) {
+        print(e.toString());
         showErrorSnack(e.toString());
       },
     );

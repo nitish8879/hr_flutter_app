@@ -44,10 +44,10 @@ class LeaveActivityModel {
     leaveStatus = LeaveActivityState.fromStrings(json['leaveStatus']);
 
     if (json['fromdate'] != null) {
-      fromdate = DateFormat("yyyy-MM-dd").parse(json['fromdate']);
+      fromdate = DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['fromdate']);
     }
     if (json['todate'] != null) {
-      todate = DateFormat("yyyy-MM-dd").parse(json['todate']);
+      todate = DateFormat("yyyy-MM-ddTHH:mm:ss").parse(json['todate']);
     }
     if (json['applyDate'] != null) {
       applyDate = DateFormat("yyyy-MM-dd").parse(json['applyDate']);
