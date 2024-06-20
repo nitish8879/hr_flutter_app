@@ -27,7 +27,7 @@ class ApplyLeavePageView extends GetView<ApplyLeavePageController> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
           16.height,
-          Text("Select Leave Type"),
+          const Text("Select Leave Type"),
           StatefulBuilder(builder: (context, s) {
             return DropdownButton<String>(
               items: LeaveType.list
@@ -42,13 +42,6 @@ class ApplyLeavePageView extends GetView<ApplyLeavePageController> {
               isExpanded: true,
               onChanged: (a) {
                 controller.selectedLeaveType = LeaveType.fromString(a!);
-                if (controller.selectedLeaveType == LeaveType.ONEDAY) {
-                  controller.canShowToDate = false;
-                } else {
-                  controller.canShowToDate = true;
-                }
-                controller.leaveEndDate.refresh();
-                controller.leaveStartDate.refresh();
                 s(() {});
               },
             );
@@ -57,7 +50,8 @@ class ApplyLeavePageView extends GetView<ApplyLeavePageController> {
           Obx(() {
             return AppButton.appOulineButtonRow(
               onPressed: () => openDatePickerdialog(true, context),
-              label: controller.leaveStartDate.value?.toMMDDYYYY ?? "Select ${controller.selectedLeaveType == LeaveType.ONEDAY ? '' : 'start '}date",
+              label: controller.leaveStartDate.value?.toMMDDYYYY ??
+                  "Select start date",
               suffixIcon: const Icon(
                 Icons.date_range,
                 color: AppColors.kBlue600,
@@ -66,13 +60,10 @@ class ApplyLeavePageView extends GetView<ApplyLeavePageController> {
           }),
           24.height,
           Obx(() {
-            controller.leaveEndDate.value;
-            if (!controller.canShowToDate) {
-              return SizedBox();
-            }
             return AppButton.appOulineButtonRow(
               onPressed: () => openDatePickerdialog(false, context),
-              label: controller.leaveEndDate.value?.toMMDDYYYY ?? "Select end date",
+              label: controller.leaveEndDate.value?.toMMDDYYYY ??
+                  "Select end date",
               suffixIcon: const Icon(
                 Icons.date_range,
                 color: AppColors.kBlue600,
@@ -85,13 +76,13 @@ class ApplyLeavePageView extends GetView<ApplyLeavePageController> {
             controller: controller.leavereasonTC,
           ),
           24.height,
-          Text("Select Approval Person"),
+          const Text("Select Approval Person"),
           Obx(() {
             if (controller.isTeamLoading.value) {
-              return UnconstrainedBox(child: CircularProgressIndicator());
+              return const UnconstrainedBox(child: CircularProgressIndicator());
             }
             if (controller.adminMembers.isEmpty) {
-              return Text("No Admin Members Found");
+              return const Text("No Admin Members Found");
             }
             return DropdownButton<MembersData>(
               items: controller.adminMembers
@@ -119,24 +110,23 @@ class ApplyLeavePageView extends GetView<ApplyLeavePageController> {
     );
   }
 
-  Future<void> openDatePickerdialog(bool isStartDate, BuildContext context) async {
-    final companyworkingdays = workingDays(AppStorageController.to.currentUser?.wrokingDays ?? []);
+  Future<void> openDatePickerdialog(
+      bool isStartDate, BuildContext context) async {
+    final companyworkingdays =
+        workingDays(AppStorageController.to.currentUser?.wrokingDays ?? []);
     final selectedDate = await showDatePicker(
       context: context,
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
-      initialDate: isStartDate ? controller.leaveStartDate.value : controller.leaveEndDate.value,
+      initialDate: isStartDate
+          ? controller.leaveStartDate.value
+          : controller.leaveEndDate.value,
       selectableDayPredicate: (day) {
         return companyworkingdays.contains(day.weekday);
       },
     );
     if (selectedDate != null) {
       if (isStartDate) {
-        if (controller.selectedLeaveType == LeaveType.ONEDAY) {
-          controller.leaveEndDate.value = selectedDate;
-        } else {
-          controller.leaveEndDate.value = null;
-        }
         controller.leaveStartDate.value = selectedDate;
       } else {
         controller.leaveEndDate.value = selectedDate;
